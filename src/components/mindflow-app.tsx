@@ -12,6 +12,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCap
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import {
   Target,
   Gift,
@@ -40,12 +42,14 @@ import {
   Trash2,
   CalendarDays,
   PlusCircle,
+  CalendarIcon,
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
 import { Skeleton } from './ui/skeleton';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -298,8 +302,8 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
 
 const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     const initialData: TrackingDataRow[] = [
-      { id: 1, period: "Semana 1 (01-07 Jul)", investment: 126, impressions: 15000, clicks: 135, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
-      { id: 2, period: "Semana 2 (08-14 Jul)", investment: 126, impressions: 0, clicks: 0, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
+      { id: 1, period: new Date(2024, 6, 1), investment: 126, impressions: 15000, clicks: 135, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
+      { id: 2, period: new Date(2024, 6, 8), investment: 126, impressions: 0, clicks: 0, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
     ];
     
     type StoredAnalysis = PerformanceAnalysis & { id: string; date: string };
@@ -318,7 +322,11 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
             }
             const storedTrackingData = localStorage.getItem('smr-tracking-data');
             if (storedTrackingData) {
-                setTrackingData(JSON.parse(storedTrackingData));
+                const parsedData = JSON.parse(storedTrackingData).map((row: any) => ({
+                    ...row,
+                    period: new Date(row.period),
+                }));
+                setTrackingData(parsedData);
             } else {
                 setTrackingData(initialData);
             }
@@ -335,9 +343,12 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
         }
     }, [analyses, trackingData, isMounted]);
 
-    const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string | number) => {
+    const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string | number | Date) => {
         let updatedData = trackingData.map(row => {
             if (row.id === id) {
+                if (field === 'period' && value instanceof Date) {
+                    return { ...row, period: value };
+                }
                 const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value;
                 return { ...row, [field]: numericValue };
             }
@@ -354,15 +365,15 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
 
         setTrackingData(updatedData);
     };
-
-    const handlePeriodChange = (id: number, value: string) => {
-         setTrackingData(trackingData.map(row => (row.id === id ? { ...row, period: value } : row)));
-    };
     
     const handleAddRow = () => {
+        const lastRow = trackingData[trackingData.length - 1];
+        const newPeriod = new Date(lastRow.period);
+        newPeriod.setDate(newPeriod.getDate() + 7);
+
         const newRow: TrackingDataRow = {
             id: new Date().getTime(),
-            period: `Semana ${trackingData.length + 1}`,
+            period: newPeriod,
             investment: 0,
             impressions: 0,
             clicks: 0,
@@ -403,9 +414,13 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     const handleAnalyse = useCallback(async () => {
         setIsLoading(true);
         try {
+            const dataForAnalysis = trackingData
+                .filter(d => d.investment > 0)
+                .map(d => ({...d, period: format(d.period, 'yyyy-MM-dd')}));
+
             const result = await analyseCampaignPerformance({
                 kpis: plan.kpis,
-                data: trackingData.filter(d => d.investment > 0),
+                data: dataForAnalysis,
             });
             const newAnalysis: StoredAnalysis = {
                 ...result,
@@ -449,7 +464,7 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[150px]">Período</TableHead>
+                                    <TableHead className="w-[180px]">Período</TableHead>
                                     <TableHead>Invest.</TableHead>
                                     <TableHead>Impr.</TableHead>
                                     <TableHead>Cliques</TableHead>
@@ -475,7 +490,28 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                     return (
                                     <TableRow key={row.id}>
                                         <TableCell className="font-medium">
-                                          <Input type="text" value={row.period} onChange={e => handlePeriodChange(row.id, e.target.value)} className="w-32" />
+                                          <Popover>
+                                            <PopoverTrigger asChild>
+                                              <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                  "w-[150px] justify-start text-left font-normal",
+                                                  !row.period && "text-muted-foreground"
+                                                )}
+                                              >
+                                                <CalendarIcon className="mr-2 h-4 w-4" />
+                                                {row.period ? format(row.period, "dd/MM/yy") : <span>Escolha a data</span>}
+                                              </Button>
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-auto p-0">
+                                              <Calendar
+                                                mode="single"
+                                                selected={row.period}
+                                                onSelect={(date) => handleDataChange(row.id, 'period', date || new Date())}
+                                                initialFocus
+                                              />
+                                            </PopoverContent>
+                                          </Popover>
                                         </TableCell>
                                         <TableCell>
                                           <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-20" />
@@ -829,3 +865,5 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         </div>
     );
 }
+
+    

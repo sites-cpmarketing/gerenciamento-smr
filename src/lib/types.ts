@@ -143,7 +143,7 @@ export type CampaignPlan = {
 
 export type TrackingDataRow = {
   id: number;
-  period: string;
+  period: Date;
   investment: number;
   impressions: number;
   clicks: number;
@@ -159,8 +159,7 @@ const KpiSchema = z.object({
 });
 
 const TrackingDataRowSchema = z.object({
-  id: z.number(),
-  period: z.string(),
+  period: z.string().describe("The start date of the tracking period, in 'yyyy-MM-dd' format."),
   investment: z.number(),
   impressions: z.number(),
   clicks: z.number(),
@@ -182,3 +181,5 @@ export const PerformanceAnalysisSchema = z.object({
   suggestions: z.array(z.string()).describe("A list of clear, actionable suggestions for optimization. Each suggestion should be a complete sentence and directly address a specific metric or observation. Prefix suggestions that require immediate attention with 'Atenção: '."),
 });
 export type PerformanceAnalysis = z.infer<typeof PerformanceAnalysisSchema>;
+
+    
