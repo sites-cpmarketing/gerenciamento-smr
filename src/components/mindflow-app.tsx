@@ -449,16 +449,16 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="min-w-[150px]">Período</TableHead>
-                                    <TableHead>Investimento (R$)</TableHead>
-                                    <TableHead>Impressões</TableHead>
+                                    <TableHead className="w-[150px]">Período</TableHead>
+                                    <TableHead>Invest.</TableHead>
+                                    <TableHead>Impr.</TableHead>
                                     <TableHead>Cliques</TableHead>
                                     <TableHead>CTR</TableHead>
                                     <TableHead>CPC</TableHead>
                                     <TableHead>Leads</TableHead>
                                     <TableHead>CPL</TableHead>
-                                    <TableHead>Vendas E-book</TableHead>
-                                    <TableHead>Vendas Treinamento</TableHead>
+                                    <TableHead>V. Ebook</TableHead>
+                                    <TableHead>V. Trein.</TableHead>
                                     <TableHead>Receita</TableHead>
                                     <TableHead>ROI</TableHead>
                                     <TableHead className="text-right">Ações</TableHead>
@@ -475,13 +475,13 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                     return (
                                     <TableRow key={row.id}>
                                         <TableCell className="font-medium">
-                                          <Input type="text" value={row.period} onChange={e => handlePeriodChange(row.id, e.target.value)} className="w-36" />
+                                          <Input type="text" value={row.period} onChange={e => handlePeriodChange(row.id, e.target.value)} className="w-32" />
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
+                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-20" />
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-24" />
+                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-20" />
                                         </TableCell>
                                         <TableCell>
                                           <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-20" />
@@ -829,5 +829,3 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         </div>
     );
 }
-
-    
