@@ -121,6 +121,29 @@ const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, ico
 
 const CreativeCard = ({ creative }: { creative: CreativePlan }) => {
     const Icon = creativeIcons[creative.format];
+
+    const formatCreativeDescription = (desc: string) => {
+        const parts = desc.split(/(Visual:|Copy:)/g);
+        const elements = [];
+        let currentSection = "";
+         for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            if (part.endsWith(':')) {
+                if (currentSection) {
+                     elements.push(<p key={i-1} className="text-muted-foreground">{currentSection.trim()}</p>);
+                }
+                elements.push(<strong key={i} className="text-foreground pt-2 block">{part}</strong>);
+                currentSection = "";
+            } else {
+                currentSection += " " + part;
+            }
+        }
+        if (currentSection) {
+            elements.push(<p key={parts.length} className="text-muted-foreground">{currentSection.trim()}</p>);
+        }
+        return elements.slice(1);
+    };
+
     return (
     <Card className="bg-card-foreground/5 border-l-4 border-primary">
         <CardHeader>
@@ -130,7 +153,8 @@ const CreativeCard = ({ creative }: { creative: CreativePlan }) => {
                     <strong className="text-foreground text-base">{creative.title} ({creative.format})</strong>
                 </div>
 
-                <p className="pt-2">{creative.description}</p>
+                <div className="space-y-1">{formatCreativeDescription(creative.description)}</div>
+
                 <div className="flex items-start gap-2 pt-3 mt-3 border-t border-border/50">
                     <Lightbulb className="w-4 h-4 mt-1 text-accent shrink-0" />
                     <p className="text-xs text-muted-foreground">

@@ -45,21 +45,21 @@ export const campaignPlanData: CampaignPlan = {
               id: 'cr-1-1',
               format: 'Imagem Estática',
               title: "Venda Mais com Gatilhos Mentais",
-              description: "Imagem de impacto com o título do e-book em destaque. Texto de apoio: 'Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.'",
+              description: "Visual: Imagem de impacto com o título do e-book em destaque. Copy: 'Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.'",
               purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
             },
             {
               id: 'cr-1-2',
               format: 'Vídeo',
               title: "Seus Clientes Dizem 'Não'?",
-              description: "Vídeo curto (15-30s) mostrando uma pessoa frustrada com vendas e depois tendo uma 'luz' ao ler o e-book. Narração: 'Aprenda a virar o jogo com técnicas de persuasão testadas. Este e-book revela os segredos para fechar mais negócios. Adquira já!'",
+              description: "Visual: Vídeo curto (15-30s) mostrando uma pessoa frustrada com vendas e depois tendo uma 'luz' ao ler o e-book. Copy: 'Aprenda a virar o jogo com técnicas de persuasão testadas. Este e-book revela os segredos para fechar mais negócios. Adquira já!'",
               purpose: "Foco na 'dor' (rejeição) para gerar conexão emocional. Ideal para quem se sente frustrado com os resultados atuais."
             },
             {
               id: 'cr-1-3',
               format: 'Imagem Estática',
               title: "PNL para Vendedores",
-              description: "Carrossel com 3 imagens: a primeira com a pergunta 'PNL funciona para vender?', a segunda com um gatilho mental explicado, e a terceira com a chamada para ação para o e-book.",
+              description: "Visual: Carrossel com 3 imagens: a primeira com a pergunta 'PNL funciona para vender?', a segunda com um gatilho mental explicado, e a terceira com a CTA. Copy: 'Quer saber como a PNL pode dobrar suas vendas? Veja como no nosso e-book.'",
               purpose: "Foco na técnica (PNL) para atrair um público mais analítico e interessado em desenvolvimento profissional."
             }
         ],
@@ -73,14 +73,14 @@ export const campaignPlanData: CampaignPlan = {
               id: 'cr-b-1-1',
               format: 'Vídeo',
               title: "O Segredo dos Vendedores de Sucesso",
-              description: "Vídeo com depoimento rápido (simulado ou real) de alguém que leu o e-book e teve resultado. Legendas dinâmicas. Texto: 'Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos que fecham negócios.'",
+              description: "Visual: Vídeo com depoimento rápido (simulado ou real) de alguém que leu o e-book e teve resultado. Legendas dinâmicas. Copy: 'Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos que fecham negócios.'",
               purpose: "Foco na prova social e na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
             },
             {
               id: 'cr-b-1-2',
               format: 'Imagem Estática',
               title: "Para Empreendedores que Vendem",
-              description: "Imagem mostrando o gráfico de vendas de uma empresa crescendo. Título: 'Seu produto é ótimo, mas as vendas não decolam? O problema pode estar na sua abordagem. Aprenda a persuadir com nosso guia prático.'",
+              description: "Visual: Imagem mostrando o gráfico de vendas de uma empresa crescendo. Copy: 'Seu produto é ótimo, mas as vendas não decolam? O problema pode estar na sua abordagem. Aprenda a persuadir com nosso guia prático.'",
               purpose: "Foco em um nicho (empreendedores) com uma dor específica (vendas baixas)."
             }
           ]
@@ -104,14 +104,14 @@ export const campaignPlanData: CampaignPlan = {
               id: 'cr-2-1',
               format: 'Imagem Estática',
               title: "Você Chegou Perto. Finalize sua Compra.",
-              description: "Imagem do produto que a pessoa visitou (E-book ou Treinamento) com um selo de 'Oferta Exclusiva'. Texto: 'Vimos que você se interessou. Não perca a chance de transformar seus resultados. Complete seu pedido e comece hoje.'",
+              description: "Visual: Imagem do produto que a pessoa visitou (E-book ou Treinamento) com um selo de 'Oferta Exclusiva'. Copy: 'Vimos que você se interessou. Não perca a chance de transformar seus resultados. Complete seu pedido e comece hoje.'",
               purpose: "Lembrete direto e com senso de urgência para recuperar carrinhos abandonados e visitantes indecisos."
             },
             {
               id: 'cr-2-2',
               format: 'Vídeo',
               title: "Ainda dá tempo de garantir sua vaga",
-              description: "Vídeo curto do instrutor falando: 'Notei que você visitou nossa página do Treinamento Mind$ell. Quero pessoalmente te convidar para se juntar à nossa turma de especialistas. Finalize sua inscrição.'",
+              description: "Visual: Vídeo curto do instrutor falando diretamente para a câmera. Copy: 'Notei que você visitou nossa página do Treinamento Mind$ell. Quero pessoalmente te convidar para se juntar à nossa turma de especialistas. Finalize sua inscrição.'",
               purpose: "Gera escassez e exclusividade para incentivar a conclusão da compra do treinamento, com um toque pessoal."
             }
         ],
@@ -125,14 +125,14 @@ export const campaignPlanData: CampaignPlan = {
               id: 'cr-b-2-1',
               format: 'Imagem Estática',
               title: "Você Deu o Primeiro Passo. Qual o Próximo?",
-              description: "Carrossel comparando o conteúdo do E-book (check ✓) com os módulos do Treinamento (o que ele vai aprender a mais). Texto: 'Você aprendeu os gatilhos mentais. Aprofunde com o Treinamento Mind$ell.'",
+              description: "Visual: Carrossel comparando o conteúdo do E-book (check ✓) com os módulos do Treinamento. Copy: 'Você aprendeu os gatilhos mentais. Que tal aprofundar com o Treinamento Mind$ell e se tornar um especialista? Veja o que você vai dominar.'",
               purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
             },
             {
               id: 'cr-b-2-2',
               format: 'Vídeo',
               title: "De Leitor a Especialista",
-              description: "Vídeo mostrando a 'jornada do herói': uma pessoa lendo o e-book e depois aplicando as técnicas com sucesso em uma reunião. Texto: 'O e-book foi só o começo. No Treinamento, você aplica na prática.'",
+              description: "Visual: Vídeo mostrando a 'jornada do herói': uma pessoa lendo o e-book e depois aplicando as técnicas com sucesso em uma reunião. Copy: 'O e-book foi só o começo. No Treinamento, você aplica na prática e vira o jogo. Pronto para o próximo nível?'",
               purpose: "Foco na transformação e evolução do cliente, validando a compra anterior e incentivando a próxima."
             }
           ]
