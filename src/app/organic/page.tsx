@@ -5,7 +5,9 @@ import { useState, useEffect } from 'react';
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check, Instagram, Mic, Video, FileText, Lightbulb, CalendarDays, Users, BarChartHorizontal } from "lucide-react";
+import { Check, Instagram, Mic, Video, FileText, Lightbulb, CalendarDays, Users, BarChartHorizontal, Home } from "lucide-react";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 const organicPlan = {
   strategy: {
@@ -119,10 +121,17 @@ export default function OrganicPage() {
 
   return (
     <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-12">
-       <header className="flex justify-between items-center">
-            <div className="text-left space-y-1">
-                <h1 className="text-3xl sm:text-4xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">GESTÃO DE CONTEÚDO ORGÂNICO</h1>
-                <p className="text-md text-muted-foreground">Plano de Ação para Construção de Autoridade e Vendas no Instagram</p>
+       <header className="flex justify-between items-start">
+            <div className="flex items-center gap-4">
+                <Link href="/">
+                    <Button variant="outline" size="icon">
+                        <Home className="w-5 h-5" />
+                    </Button>
+                </Link>
+                <div className="text-left space-y-1">
+                    <h1 className="text-3xl sm:text-4xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">GESTÃO DE CONTEÚDO ORGÂNICO</h1>
+                    <p className="text-md text-muted-foreground">Plano de Ação para Construção de Autoridade e Vendas no Instagram</p>
+                </div>
             </div>
         </header>
 

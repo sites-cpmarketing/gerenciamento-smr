@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import Link from 'next/link';
 import {
   Sidebar,
   SidebarContent,
@@ -60,7 +61,8 @@ import {
   AreaChart,
   Banknote,
   Telescope,
-  ArrowRight
+  ArrowRight,
+  Home,
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
@@ -1042,10 +1044,17 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
 
             <SidebarInset>
                 <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-10">
-                    <header className="flex justify-between items-center">
-                         <div className="text-left space-y-1">
-                            <h1 className="text-3xl sm:text-4xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">GERENCIAMENTO SMR</h1>
-                            <p className="text-md text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
+                    <header className="flex justify-between items-start">
+                         <div className="flex items-center gap-4">
+                            <Link href="/">
+                                <Button variant="outline" size="icon">
+                                    <Home className="w-5 h-5" />
+                                </Button>
+                            </Link>
+                            <div className="text-left space-y-1">
+                                <h1 className="text-3xl sm:text-4xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">GESTÃO DE TRÁFEGO PAGO</h1>
+                                <p className="text-md text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
+                            </div>
                         </div>
                         <SidebarTrigger className="md:hidden" />
                     </header>
