@@ -35,23 +35,23 @@ export const campaignPlanData: CampaignPlan = {
       description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes com o E-book de baixo custo para validar a oferta e o público.",
       execution: {
         audience: {
-          title: "Público Principal (Amplo)",
-          description: "Vendedores, empreendedores, coaches, consultores, profissionais de marketing. Interesses em: vendas, negociação, PNL, persuasão, desenvolvimento pessoal, Tony Robbins, Dale Carnegie."
+          title: "Público Principal (Interesses)",
+          description: "Segmentação Detalhada > Interesses: 'Vendas', 'Técnicas de Vendas', 'Negociação', 'Programação Neurolinguística (PNL)', 'Persuasão', 'Empreendedorismo', 'Hotmart'. Interesses em autores: 'Tony Robbins', 'Dale Carnegie', 'Robert Cialdini'."
         },
         creative: {
           headline: "Venda Mais com Gatilhos Mentais",
           text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.",
-          purpose: "Chamar a atenção com uma promessa clara e de resultado rápido. O preço baixo quebra a barreira inicial da compra."
+          purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
         },
         planB: {
           audience: {
-            title: "Público Alternativo (Lookalike)",
-            description: "Público semelhante (1%) aos compradores do E-book. Será criado após as primeiras 50-100 vendas para encontrar pessoas com perfil idêntico aos clientes."
+            title: "Público Alternativo (Comportamentos)",
+            description: "Segmentação Detalhada > Comportamentos: 'Compradores envolvidos'. Camada adicional de Interesses: 'Marketing digital', 'Pequenas empresas'. Excluir pessoas que já compraram o e-book."
           },
           creative: {
             headline: "O Segredo dos Vendedores de Sucesso",
             text: "Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos mentais que fecham negócios. E-book por R$ 19,90.",
-            purpose: "Testar uma nova abordagem focada na 'dor' do público (rejeição) em vez de focar apenas no 'ganho' (vender mais)."
+            purpose: "Foco na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
           }
         }
       }
@@ -63,22 +63,22 @@ export const campaignPlanData: CampaignPlan = {
       description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, oferecendo o Treinamento como o próximo passo.",
       execution: {
         audience: {
-          title: "Público Principal (Engajados)",
-          description: "Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias, mas não compraram."
+          title: "Público Principal (Visitantes do Site)",
+          description: "Público Personalizado > Fontes do Site: Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias, mas não acionaram o evento de compra (Purchase)."
         },
         creative: {
-          headline: "Domine a Arte de Vender com PNL",
-          text: "Você chegou perto. Transforme seu interesse em resultado. Domine técnicas de vendas e PNL para fechar negócios com confiança. Inscreva-se no treinamento completo.",
-          purpose: "Reforçar o valor do treinamento para um público que já conhece a oferta. A comunicação é direta e foca na decisão final."
+          headline: "Você Chegou Perto. Finalize sua Compra.",
+          text: "Vimos que você se interessou pelo nosso material. Não perca a chance de transformar seus resultados. Complete seu pedido e comece a vender mais hoje.",
+          purpose: "Lembrete direto e com senso de urgência para recuperar carrinhos abandonados e visitantes indecisos."
         },
         planB: {
           audience: {
             title: "Público Alternativo (Compradores do E-book)",
-            description: "Clientes que compraram o E-book. O objetivo é fazer o upsell para o treinamento completo."
+            description: "Público Personalizado > Lista de Clientes: Clientes que compraram o E-book nos últimos 30 dias. O objetivo é fazer o upsell para o treinamento completo."
           },
           creative: {
             headline: "Você Deu o Primeiro Passo. Qual o Próximo?",
-            text: "Você aprendeu os gatilhos mentais. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
+            text: "Você aprendeu os gatilhos mentais do e-book. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
             purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
           }
         }
