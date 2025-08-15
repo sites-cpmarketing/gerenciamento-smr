@@ -3,7 +3,7 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'MindFlow',
+  title: 'GERENCIAMENTO SMR',
   description: 'Seu plano de campanha estratégico',
 };
 

@@ -97,7 +97,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     return (
         <div className="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8 space-y-10">
             <header className="text-center space-y-2">
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">MindFlow</h1>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
                 <p className="text-lg text-muted-foreground">Seu Painel de Controle de Campanha Estratégico</p>
             </header>
             
