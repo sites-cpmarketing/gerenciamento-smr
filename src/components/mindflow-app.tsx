@@ -7,13 +7,26 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+  useSidebar
+} from '@/components/ui/sidebar'
+
 import {
   Target,
   Gift,
@@ -43,6 +56,10 @@ import {
   CalendarDays,
   PlusCircle,
   CalendarIcon,
+  LayoutDashboard,
+  AreaChart,
+  Banknote,
+  Telescope
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
@@ -617,17 +634,215 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     );
 };
 
+type ActiveView = 'fase1' | 'investimento' | 'fase2' | 'acompanhamento';
+
+
+function MainContent({ view, plan, checkedItems, handleCheckChange }: { view: ActiveView, plan: CampaignPlan, checkedItems: Record<string, boolean>, handleCheckChange: (id: string, checked: boolean) => void }) {
+    const totalTasks = useMemo(() => plan.executionChecklist.flatMap(group => group.items).length, [plan]);
+    const completedTasks = Object.values(checkedItems).filter(Boolean).length;
+    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+
+    switch (view) {
+        case 'investimento':
+            return <InvestmentCard investment={plan.investment} />;
+        case 'acompanhamento':
+            return <CampaignTracking plan={plan} />;
+        case 'fase2':
+            return (
+                <div className="space-y-8">
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <Rocket className="w-6 h-6 text-primary" />
+                                <CardTitle className="text-xl">{plan.phase2.title}</CardTitle>
+                            </div>
+                            <CardDescription className="pt-2">Planejamento futuro para o lançamento dos produtos de maior valor e construção de audiência qualificada.</CardDescription>
+                        </CardHeader>
+                    </Card>
+
+                    <section className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <Building className="w-7 h-7 text-primary" />
+                            <h2 className="text-2xl font-bold">Produtos Futuros</h2>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-1">
+                            {plan.phase2.futureProducts.map(product => (
+                                <Card key={product.id}>
+                                    <CardHeader>
+                                        <div className="flex justify-between items-start">
+                                          <CardTitle>{product.title} - <span className="text-primary">{product.targetPrice}</span></CardTitle>
+                                        </div>
+                                        <CardDescription className="pt-2 !mt-4">
+                                         {product.description}
+                                        </CardDescription>
+                                    </CardHeader>
+                                </Card>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <TrendingUp className="w-7 h-7 text-primary" />
+                            <h2 className="text-2xl font-bold">{plan.phase2.audienceStrategy.title}</h2>
+                        </div>
+                        <div className="space-y-6">
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>{plan.phase2.audienceStrategy.secondaryBait.title}</CardTitle>
+                                    <CardDescription className="pt-2">{plan.phase2.audienceStrategy.secondaryBait.description}</CardDescription>
+                                </CardHeader>
+                            </Card>
+                             <Card>
+                                <CardHeader>
+                                    <CardTitle>{plan.phase2.audienceStrategy.action.title}</CardTitle>
+                                    <CardDescription className="pt-2">{plan.phase2.audienceStrategy.action.description}</CardDescription>
+                                </CardHeader>
+                            </Card>
+                        </div>
+                    </section>
+                </div>
+            );
+        case 'fase1':
+        default:
+            return (
+                 <div className="space-y-8">
+                     <section className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <Gift className="w-7 h-7 text-primary" />
+                            <h2 className="text-2xl font-bold">Produtos e Ofertas</h2>
+                        </div>
+                        <div className="grid gap-6 md:grid-cols-1">
+                            {plan.offers.map(offer => (
+                                <Card key={offer.id}>
+                                    <CardHeader>
+                                        <div className="flex justify-between items-start">
+                                          <CardTitle>{offer.title} - <span className="text-primary">{offer.price}</span></CardTitle>
+                                        </div>
+                                        <CardDescription className="pt-2 !mt-4">
+                                          <strong className="text-foreground">Posicionamento:</strong> {offer.positioning}
+                                        </CardDescription>
+                                         <CardDescription className="pt-2">
+                                          <strong className="text-foreground">Proposta de Valor:</strong> {offer.valueProposition}
+                                        </CardDescription>
+                                    </CardHeader>
+                                </Card>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <Goal className="w-7 h-7 text-primary" />
+                            <h2 className="text-2xl font-bold">Objetivos e Métricas (KPIs)</h2>
+                        </div>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{plan.strategy.title}</CardTitle>
+                                <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
+                                <div className="flex flex-wrap gap-2 pt-4">
+                                    {plan.kpis.map(kpi => <KpiDisplay key={kpi.metric + kpi.target} kpi={kpi} />)}
+                                </div>
+                            </CardHeader>
+                        </Card>
+                    </section>
+
+                    <section className="space-y-6">
+                        <div className="flex items-center gap-3">
+                            <Megaphone className="w-7 h-7 text-primary" />
+                            <h2 className="text-2xl font-bold">Campanhas e Planos de Execução</h2>
+                        </div>
+                        <Accordion type="multiple" className="w-full space-y-6">
+                            {plan.campaigns.map(campaign => (
+                                 <AccordionItem value={campaign.id} key={campaign.id} className="bg-card border rounded-lg px-4">
+                                    <AccordionTrigger>
+                                      <div className="flex items-center gap-3 w-full">
+                                          <div className="flex-grow text-left">
+                                              <p className="text-xl font-bold">{campaign.title}</p>
+                                              <div className="flex items-center gap-4 mt-2">
+                                                <Badge>{campaign.platform}</Badge>
+                                                <Badge variant="secondary">Orçamento: {campaign.budget}</Badge>
+                                                <Badge variant="outline">Produto: {campaign.product}</Badge>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent className="pt-6 space-y-6">
+                                        <Card className="bg-card-foreground/5">
+                                          <CardHeader>
+                                            <CardTitle>Descrição da Campanha</CardTitle>
+                                            <CardDescription className="pt-2">{campaign.description}</CardDescription>
+                                          </CardHeader>
+                                        </Card>
+
+                                        <h3 className="text-lg font-semibold text-primary pl-1">Plano Principal</h3>
+                                        <div className="grid gap-6">
+                                           <AudienceCard audience={campaign.execution.audience} icon={Users} title="Público" />
+                                           <div className="space-y-4">
+                                             {campaign.execution.creatives.map(creative => (
+                                                <CreativeCard key={creative.id} creative={creative} />
+                                             ))}
+                                           </div>
+                                        </div>
+
+                                        <h3 className="text-lg font-semibold text-destructive pl-1">Plano B (Contingência)</h3>
+                                         <div className="grid gap-6">
+                                           <AudienceCard audience={campaign.execution.planB.audience} icon={ShieldQuestion} title="Público Alternativo" />
+                                           <div className="space-y-4">
+                                                {campaign.execution.planB.creatives.map(creative => (
+                                                    <CreativeCard key={creative.id} creative={creative} />
+                                                ))}
+                                           </div>
+                                        </div>
+                                    </AccordionContent>
+                                 </AccordionItem>
+                            ))}
+                        </Accordion>
+                    </section>
+
+                    <EmailFlows flows={plan.emailFlows} />
+
+                    <Accordion type="single" collapsible className="w-full space-y-6">
+                      <AccordionItem value="item-1" className="bg-card border rounded-lg px-4">
+                        <AccordionTrigger>
+                          <div className="flex items-center gap-3">
+                              <ListTodo className="w-7 h-7 text-primary" />
+                              <h2 className="text-2xl font-bold">Checklist de Execução</h2>
+                          </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="pt-6 space-y-8">
+                           <Card className="shadow-lg">
+                              <CardHeader>
+                                  <div className="flex items-center gap-4">
+                                      <CheckCircle className="w-8 h-8 text-accent" />
+                                      <div>
+                                          <CardTitle>Progresso da Campanha</CardTitle>
+                                          <CardDescription>{completedTasks} de {totalTasks} tarefas concluídas</CardDescription>
+                                      </div>
+                                  </div>
+                              </CardHeader>
+                              <CardContent>
+                                  <Progress value={progressPercentage} className="h-3" />
+                              </CardContent>
+                          </Card>
+                          <div className="space-y-4">
+                              {plan.executionChecklist.map(group => (
+                                  <ChecklistGroupComponent key={group.id} group={group} checkedItems={checkedItems} onToggle={handleCheckChange} />
+                              ))}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                 </div>
+            );
+    }
+}
+
+
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [isMounted, setIsMounted] = useState(false);
-
-    const allActionItems = useMemo(() =>
-        plan.executionChecklist.flatMap(group => group.items)
-    , [plan]);
-
-    const totalTasks = allActionItems.length;
-    const completedTasks = Object.values(checkedItems).filter(Boolean).length;
-    const progressPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+    const [activeView, setActiveView] = useState<ActiveView>('fase1');
 
     useEffect(() => {
         try {
@@ -660,210 +875,58 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     }
 
     return (
-        <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-10">
-            <header className="text-center space-y-2">
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
-                <p className="text-lg text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
-            </header>
+        <SidebarProvider>
+            <Sidebar>
+                <SidebarContent>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Planejamento</SidebarGroupLabel>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={() => setActiveView('fase1')} isActive={activeView === 'fase1'}>
+                                    <LayoutDashboard />
+                                    <span>Fase 1: Lançamento</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                             <SidebarMenuItem>
+                                <SidebarMenuButton onClick={() => setActiveView('investimento')} isActive={activeView === 'investimento'}>
+                                    <Banknote />
+                                    <span>Investimento</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                             <SidebarMenuItem>
+                                <SidebarMenuButton onClick={() => setActiveView('fase2')} isActive={activeView === 'fase2'}>
+                                    <Telescope />
+                                    <span>Fase 2: Expansão</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroup>
+                    <SidebarGroup>
+                        <SidebarGroupLabel>Análise</SidebarGroupLabel>
+                        <SidebarMenu>
+                            <SidebarMenuItem>
+                                <SidebarMenuButton onClick={() => setActiveView('acompanhamento')} isActive={activeView === 'acompanhamento'}>
+                                    <AreaChart />
+                                    <span>Acompanhamento</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        </SidebarMenu>
+                    </SidebarGroup>
+                </SidebarContent>
+            </Sidebar>
 
-            <Tabs defaultValue="fase1" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="fase1">Fase 1: Lançamento</TabsTrigger>
-                <TabsTrigger value="acompanhamento">Acompanhamento</TabsTrigger>
-                <TabsTrigger value="investimento">Investimento</TabsTrigger>
-                <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="fase1" className="space-y-8 mt-8">
-
-                 <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Gift className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Produtos e Ofertas</h2>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-1">
-                        {plan.offers.map(offer => (
-                            <Card key={offer.id}>
-                                <CardHeader>
-                                    <div className="flex justify-between items-start">
-                                      <CardTitle>{offer.title} - <span className="text-primary">{offer.price}</span></CardTitle>
-                                    </div>
-                                    <CardDescription className="pt-2 !mt-4">
-                                      <strong className="text-foreground">Posicionamento:</strong> {offer.positioning}
-                                    </CardDescription>
-                                     <CardDescription className="pt-2">
-                                      <strong className="text-foreground">Proposta de Valor:</strong> {offer.valueProposition}
-                                    </CardDescription>
-                                </CardHeader>
-                            </Card>
-                        ))}
-                    </div>
-                </section>
-
-                <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Goal className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Objetivos e Métricas (KPIs)</h2>
-                    </div>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>{plan.strategy.title}</CardTitle>
-                            <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
-                            <div className="flex flex-wrap gap-2 pt-4">
-                                {plan.kpis.map(kpi => <KpiDisplay key={kpi.metric + kpi.target} kpi={kpi} />)}
-                            </div>
-                        </CardHeader>
-                    </Card>
-                </section>
-
-                <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Megaphone className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Campanhas e Planos de Execução</h2>
-                    </div>
-                    <Accordion type="multiple" className="w-full space-y-6">
-                        {plan.campaigns.map(campaign => (
-                             <AccordionItem value={campaign.id} key={campaign.id} className="bg-card border rounded-lg px-4">
-                                <AccordionTrigger>
-                                  <div className="flex items-center gap-3 w-full">
-                                      <div className="flex-grow text-left">
-                                          <p className="text-xl font-bold">{campaign.title}</p>
-                                          <div className="flex items-center gap-4 mt-2">
-                                            <Badge>{campaign.platform}</Badge>
-                                            <Badge variant="secondary">Orçamento: {campaign.budget}</Badge>
-                                            <Badge variant="outline">Produto: {campaign.product}</Badge>
-                                          </div>
-                                      </div>
-                                  </div>
-                                </AccordionTrigger>
-                                <AccordionContent className="pt-6 space-y-6">
-                                    <Card className="bg-card-foreground/5">
-                                      <CardHeader>
-                                        <CardTitle>Descrição da Campanha</CardTitle>
-                                        <CardDescription className="pt-2">{campaign.description}</CardDescription>
-                                      </CardHeader>
-                                    </Card>
-
-                                    <h3 className="text-lg font-semibold text-primary pl-1">Plano Principal</h3>
-                                    <div className="grid gap-6">
-                                       <AudienceCard audience={campaign.execution.audience} icon={Users} title="Público" />
-                                       <div className="space-y-4">
-                                         {campaign.execution.creatives.map(creative => (
-                                            <CreativeCard key={creative.id} creative={creative} />
-                                         ))}
-                                       </div>
-                                    </div>
-
-                                    <h3 className="text-lg font-semibold text-destructive pl-1">Plano B (Contingência)</h3>
-                                     <div className="grid gap-6">
-                                       <AudienceCard audience={campaign.execution.planB.audience} icon={ShieldQuestion} title="Público Alternativo" />
-                                       <div className="space-y-4">
-                                            {campaign.execution.planB.creatives.map(creative => (
-                                                <CreativeCard key={creative.id} creative={creative} />
-                                            ))}
-                                       </div>
-                                    </div>
-                                </AccordionContent>
-                             </AccordionItem>
-                        ))}
-                    </Accordion>
-                </section>
-
-                <EmailFlows flows={plan.emailFlows} />
-
-                <Accordion type="single" collapsible className="w-full space-y-6">
-                  <AccordionItem value="item-1" className="bg-card border rounded-lg px-4">
-                    <AccordionTrigger>
-                      <div className="flex items-center gap-3">
-                          <ListTodo className="w-7 h-7 text-primary" />
-                          <h2 className="text-2xl font-bold">Checklist de Execução</h2>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="pt-6 space-y-8">
-                       <Card className="shadow-lg">
-                          <CardHeader>
-                              <div className="flex items-center gap-4">
-                                  <CheckCircle className="w-8 h-8 text-accent" />
-                                  <div>
-                                      <CardTitle>Progresso da Campanha</CardTitle>
-                                      <CardDescription>{completedTasks} de {totalTasks} tarefas concluídas</CardDescription>
-                                  </div>
-                              </div>
-                          </CardHeader>
-                          <CardContent>
-                              <Progress value={progressPercentage} className="h-3" />
-                          </CardContent>
-                      </Card>
-                      <div className="space-y-4">
-                          {plan.executionChecklist.map(group => (
-                              <ChecklistGroupComponent key={group.id} group={group} checkedItems={checkedItems} onToggle={handleCheckChange} />
-                          ))}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-              </TabsContent>
-              
-               <TabsContent value="acompanhamento" className="space-y-8 mt-8">
-                    <CampaignTracking plan={plan}/>
-               </TabsContent>
-               <TabsContent value="investimento" className="space-y-8 mt-8">
-                    <InvestmentCard investment={plan.investment} />
-              </TabsContent>
-              <TabsContent value="fase2" className="space-y-8 mt-8">
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <Rocket className="w-6 h-6 text-primary" />
-                            <CardTitle className="text-xl">{plan.phase2.title}</CardTitle>
+            <SidebarInset>
+                <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-10">
+                    <header className="flex justify-between items-center">
+                        <div className="text-left space-y-1">
+                            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
+                            <p className="text-md text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
                         </div>
-                        <CardDescription className="pt-2">Planejamento futuro para o lançamento dos produtos de maior valor e construção de audiência qualificada.</CardDescription>
-                    </CardHeader>
-                </Card>
-
-                <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Building className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Produtos Futuros</h2>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-1">
-                        {plan.phase2.futureProducts.map(product => (
-                            <Card key={product.id}>
-                                <CardHeader>
-                                    <div className="flex justify-between items-start">
-                                      <CardTitle>{product.title} - <span className="text-primary">{product.targetPrice}</span></CardTitle>
-                                    </div>
-                                    <CardDescription className="pt-2 !mt-4">
-                                     {product.description}
-                                    </CardDescription>
-                                </CardHeader>
-                            </Card>
-                        ))}
-                    </div>
-                </section>
-
-                <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <TrendingUp className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">{plan.phase2.audienceStrategy.title}</h2>
-                    </div>
-                    <div className="space-y-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>{plan.phase2.audienceStrategy.secondaryBait.title}</CardTitle>
-                                <CardDescription className="pt-2">{plan.phase2.audienceStrategy.secondaryBait.description}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                         <Card>
-                            <CardHeader>
-                                <CardTitle>{plan.phase2.audienceStrategy.action.title}</CardTitle>
-                                <CardDescription className="pt-2">{plan.phase2.audienceStrategy.action.description}</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    </div>
-                </section>
-              </TabsContent>
-            </Tabs>
-        </div>
+                        <SidebarTrigger className="md:hidden" />
+                    </header>
+                    <MainContent view={activeView} plan={plan} checkedItems={checkedItems} handleCheckChange={handleCheckChange} />
+                </div>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }
