@@ -15,6 +15,8 @@ import {
   DollarSign,
   MousePointerClick,
   Instagram,
+  FileText,
+  GraduationCap
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric } from '@/lib/types';
 
@@ -54,6 +56,16 @@ const KpiDisplay = ({ kpi }: { kpi: Kpi }) => {
     </Badge>
   );
 };
+
+const OfferIcon = ({ title }: { title: string }) => {
+  if (title.toLowerCase().includes('e-book')) {
+    return <FileText className="w-7 h-7 text-primary" />;
+  }
+  if (title.toLowerCase().includes('treinamento')) {
+    return <GraduationCap className="w-7 h-7 text-primary" />;
+  }
+  return <Gift className="w-7 h-7 text-primary" />;
+}
 
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
@@ -103,7 +115,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         <div className="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8 space-y-10">
             <header className="text-center space-y-2">
                 <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
-                <p className="text-lg text-muted-foreground">Painel de Controle da Campanha</p>
+                <p className="text-lg text-muted-foreground">Painel de Controle da Campanha Mind$ell</p>
             </header>
             
             <Card className="shadow-lg">
@@ -130,7 +142,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Afazeres da Estratégia</h4>
+                    <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Checklist de Execução</h4>
                     <div className="space-y-2">
                         {plan.strategy.actionItems.map(item => <ChecklistItem key={item.id} item={item} isChecked={!!checkedItems[item.id]} onToggle={(checked) => handleCheckChange(item.id, checked)} />)}
                     </div>
@@ -140,14 +152,17 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             <section className="space-y-6">
                 <div className="flex items-center gap-3">
                     <Gift className="w-7 h-7 text-primary" />
-                    <h2 className="text-2xl font-bold">Ofertas Ativas</h2>
+                    <h2 className="text-2xl font-bold">Produtos e Ofertas</h2>
                 </div>
                 <div className="grid gap-6 md:grid-cols-1">
                     {plan.offers.map(offer => (
                         <Card key={offer.id}>
                             <CardHeader>
-                                <CardTitle>{offer.title}</CardTitle>
-                                <CardDescription>{offer.description}</CardDescription>
+                                <div className="flex items-center gap-3">
+                                  <OfferIcon title={offer.title}/>
+                                  <CardTitle>{offer.title}</CardTitle>
+                                </div>
+                                <CardDescription className="pt-2">{offer.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Afazeres da Oferta</h4>
@@ -179,7 +194,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                         </Badge>
                                     </div>
                                     <div className="flex flex-wrap gap-2 pt-2">
-                                        {campaign.kpis.map(kpi => <KpiDisplay key={kpi.metric} kpi={kpi} />)}
+                                        {campaign.kpis.map(kpi => <KpiDisplay key={kpi.metric + kpi.target} kpi={kpi} />)}
                                     </div>
                                 </CardHeader>
                                 <CardContent>
