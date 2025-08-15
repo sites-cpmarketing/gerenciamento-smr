@@ -51,6 +51,18 @@ export type Campaign = {
   execution: CampaignExecutionPlan;
 };
 
+export type EmailFlow = {
+  id: string;
+  title: string;
+  audience: string;
+  objective: string;
+  emails: {
+    id: string;
+    subject: string;
+    content: string;
+  }[];
+}
+
 export type ChecklistGroup = {
   id: string;
   title: string;
@@ -117,6 +129,7 @@ export type CampaignPlan = {
   kpis: Kpi[];
   offers: Offer[];
   campaigns: Campaign[];
+  emailFlows: EmailFlow[];
   executionChecklist: ChecklistGroup[];
   phase2: {
     title: string;

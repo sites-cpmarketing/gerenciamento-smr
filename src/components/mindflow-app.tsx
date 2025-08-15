@@ -27,9 +27,10 @@ import {
   Image as ImageIconLucide,
   PiggyBank,
   LineChart,
-  Coins
+  Coins,
+  Mails
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails } from '@/lib/types';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow } from '@/lib/types';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -241,6 +242,44 @@ const InvestmentCard = ({ investment }: { investment: InvestmentDetails }) => (
     </Card>
 );
 
+const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
+    <section className="space-y-6">
+      <div className="flex items-center gap-3">
+        <Mails className="w-7 h-7 text-primary" />
+        <h2 className="text-2xl font-bold">Fluxo de Nutrição de E-mails</h2>
+      </div>
+      <Accordion type="multiple" className="w-full space-y-6">
+        {flows.map(flow => (
+          <AccordionItem value={flow.id} key={flow.id}>
+            <AccordionTrigger>
+              <div className="text-left">
+                <p className="text-xl font-bold">{flow.title}</p>
+                <Badge variant="secondary" className="mt-2">Público: {flow.audience}</Badge>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-4 space-y-4">
+              <Card className="bg-card-foreground/5">
+                <CardHeader>
+                  <CardTitle className="text-base">Objetivo do Fluxo</CardTitle>
+                  <CardDescription>{flow.objective}</CardDescription>
+                </CardHeader>
+              </Card>
+              <div className="space-y-3">
+                {flow.emails.map(email => (
+                  <Card key={email.id} className="border-l-4 border-accent">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Assunto: <span className="font-normal">{email.subject}</span></CardTitle>
+                      <CardDescription className="pt-2"><strong className="text-foreground">Resumo do Conteúdo:</strong> {email.content}</CardDescription>
+                    </CardHeader>
+                  </Card>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </section>
+  );
 
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
@@ -391,6 +430,8 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                         ))}
                     </Accordion>
                 </section>
+
+                <EmailFlows flows={plan.emailFlows} />
 
                 <Accordion type="single" collapsible className="w-full space-y-6">
                   <AccordionItem value="item-1">

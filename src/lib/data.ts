@@ -140,6 +140,54 @@ export const campaignPlanData: CampaignPlan = {
       }
     },
   ],
+  emailFlows: [
+    {
+      id: "flow-1",
+      title: "Fluxo Pós-Compra E-book (Upsell)",
+      audience: "Clientes que compraram o E-book Mind$ell.",
+      objective: "Apresentar o Treinamento Mind$ell como o próximo passo lógico, oferecendo um desconto especial para quem já é cliente e incentivando a compra.",
+      emails: [
+        {
+          id: "email-1-1",
+          subject: "O seu guia chegou! E agora?",
+          content: "Agradece a compra, entrega o acesso ao e-book e introduz a ideia de que o e-book é o 'primeiro passo' para uma transformação maior."
+        },
+        {
+          id: "email-1-2",
+          subject: "O segredo que não coube no e-book...",
+          content: "Cria curiosidade sobre o conteúdo do treinamento, mostrando o que o cliente pode alcançar ao se aprofundar. Apresenta o treinamento e seus benefícios."
+        },
+        {
+          id: "email-1-3",
+          subject: "Um convite especial para você (com desconto)",
+          content: "Faz a oferta direta do treinamento com um cupom de desconto exclusivo para quem comprou o e-book, criando um senso de urgência (ex: 'válido por 48h')."
+        }
+      ]
+    },
+    {
+      id: "flow-2",
+      title: "Fluxo Pós-Compra Treinamento (Engajamento)",
+      audience: "Clientes que compraram o Treinamento Mind$ell.",
+      objective: "Dar as boas-vindas, entregar conteúdo de valor, garantir que o cliente consuma o treinamento e prepará-lo para futuras ofertas de maior valor (Método Finance).",
+      emails: [
+        {
+          id: "email-2-1",
+          subject: "Seja bem-vindo(a) ao Treinamento Mind$ell!",
+          content: "Boas-vindas, instruções de acesso e um guia rápido de como aproveitar melhor o curso. O foco é gerar uma ótima primeira impressão."
+        },
+        {
+          id: "email-2-2",
+          subject: "Uma dica extra para seus estudos",
+          content: "Envia um conteúdo complementar ao treinamento (ex: um artigo, uma ferramenta ou uma dica rápida em vídeo) para manter o engajamento e reforçar a autoridade."
+        },
+        {
+          id: "email-2-3",
+          subject: "Como estão seus resultados?",
+          content: "Pede feedback sobre o treinamento e introduz sutilmente a importância da gestão financeira para o sucesso em vendas, plantando a semente para o 'Método Finance'."
+        }
+      ]
+    }
+  ],
   executionChecklist: [
     {
         id: 'day-1',
