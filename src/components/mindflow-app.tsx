@@ -8,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import {
   Target,
   Gift,
@@ -28,7 +29,8 @@ import {
   PiggyBank,
   LineChart,
   Coins,
-  Mails
+  Mails,
+  BarChartHorizontal,
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow } from '@/lib/types';
 
@@ -281,6 +283,64 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
     </section>
   );
 
+const CampaignTracking = () => {
+    // Mock data for demonstration
+    const trackingData = [
+      { id: 1, period: "Semana 1 (01-07 Jul)", investment: "R$ 126,00", clicks: 150, leads: 32, cpl: "R$ 3,94", ebookSales: 5, trainingSales: 1, cpaEbook: "R$ 18,00", cpaTraining: "R$ 36,00", revenue: "R$ 196,50", roi: "0.56" },
+      { id: 2, period: "Semana 2 (08-14 Jul)", investment: "R$ 126,00", clicks: 0, leads: 0, cpl: "N/A", ebookSales: 0, trainingSales: 0, cpaEbook: "N/A", cpaTraining: "N/A", revenue: "R$ 0,00", roi: "-1.00" },
+    ];
+
+    return (
+        <section className="space-y-6">
+            <div className="flex items-center gap-3">
+                <BarChartHorizontal className="w-7 h-7 text-primary" />
+                <h2 className="text-2xl font-bold">Acompanhamento de Performance</h2>
+            </div>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Métricas da Campanha</CardTitle>
+                    <CardDescription>
+                        Acompanhe os resultados da campanha semanalmente para otimizar o investimento e as estratégias.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Período</TableHead>
+                                <TableHead>Investimento</TableHead>
+                                <TableHead>Leads</TableHead>
+                                <TableHead>CPL</TableHead>
+                                <TableHead>Vendas E-book</TableHead>
+                                <TableHead>Vendas Treinamento</TableHead>
+                                <TableHead>Receita</TableHead>
+                                <TableHead>ROI</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {trackingData.map((row) => (
+                                <TableRow key={row.id}>
+                                    <TableCell className="font-medium">{row.period}</TableCell>
+                                    <TableCell>{row.investment}</TableCell>
+                                    <TableCell>{row.leads}</TableCell>
+                                    <TableCell>{row.cpl}</TableCell>
+                                    <TableCell>{row.ebookSales}</TableCell>
+                                    <TableCell>{row.trainingSales}</TableCell>
+                                    <TableCell className="font-semibold">{row.revenue}</TableCell>
+                                    <TableCell className={`font-bold ${parseFloat(row.roi) >= 1.0 ? 'text-green-500' : 'text-red-500'}`}>
+                                      {row.roi}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                        <TableCaption>Esta tabela será preenchida com dados reais das campanhas ativas.</TableCaption>
+                    </Table>
+                </CardContent>
+            </Card>
+        </section>
+    );
+};
+
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [isMounted, setIsMounted] = useState(false);
@@ -331,8 +391,9 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             </header>
 
             <Tabs defaultValue="fase1" className="w-full">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="fase1">Fase 1: Lançamento Mind$ell</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="fase1">Fase 1: Lançamento</TabsTrigger>
+                <TabsTrigger value="acompanhamento">Acompanhamento</TabsTrigger>
                  <TabsTrigger value="investimento">Investimento</TabsTrigger>
                 <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
               </TabsList>
@@ -465,6 +526,9 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                   </AccordionItem>
                 </Accordion>
               </TabsContent>
+               <TabsContent value="acompanhamento" className="space-y-8 mt-8">
+                    <CampaignTracking />
+               </TabsContent>
                <TabsContent value="investimento" className="space-y-8 mt-8">
                     <InvestmentCard investment={plan.investment} />
               </TabsContent>
@@ -525,3 +589,5 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         </div>
     );
 }
+
+    
