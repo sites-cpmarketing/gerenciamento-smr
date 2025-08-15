@@ -196,5 +196,36 @@ export const campaignPlanData: CampaignPlan = {
               description: "Manter uma campanha de tráfego contínua e de baixo orçamento (ex: R$ 5/dia) para a página de captura da planilha. Nutrir essa lista com conteúdo sobre gestão financeira para prepará-la para o futuro lançamento do Método Finance."
           }
       }
+  },
+  investment: {
+    title: "Análise Financeira e Projeções",
+    description: "Controle detalhado do orçamento, metas de retorno e projeções de receita para a Fase 1.",
+    budget: {
+      daily: "R$ 18,00",
+      monthly: "R$ 540,00",
+      breakdown: [
+        { campaign: "Campanha 1: Captação Direta", value: "R$ 12,00/dia" },
+        { campaign: "Campanha 2: Remarketing", value: "R$ 6,00/dia" }
+      ]
+    },
+    projections: {
+      title: "Projeções de Custo (Mensal)",
+      items: [
+        { metric: "Custo com E-book", value: "~R$ 360,00", description: "Considerando 18 vendas a um CPA de R$ 20,00." },
+        { metric: "Custo com Treinamento", value: "~R$ 180,00", description: "Considerando ~2-3 vendas a um CPA de R$ 70,00." },
+      ]
+    },
+    roi: {
+      title: "Retorno Sobre Investimento (ROI)",
+      goal: "≥ 1.0",
+      description: "A meta é que o faturamento cubra o investimento. ROI = (Receita - Custo) / Custo. Para ROI de 1.0, a receita precisa ser de R$ 1.080,00 para um custo de R$ 540,00."
+    },
+    scenarios: {
+      title: "Cenários de Receita (Validação)",
+      items: [
+        { name: "Cenário Conservador (ROI ≈ 1.0)", description: "Vender 27 E-books (R$ 537,30) e 5 Treinamentos (R$ 485,00), totalizando R$ 1.022,30." },
+        { name: "Cenário Otimista (ROI ≈ 1.5)", description: "Vender 40 E-books (R$ 796,00) e 8 Treinamentos (R$ 776,00), totalizando R$ 1.572,00." },
+      ]
+    }
   }
 };

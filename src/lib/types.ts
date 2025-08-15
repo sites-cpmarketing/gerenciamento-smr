@@ -76,6 +76,39 @@ export type Phase2Strategy = {
     }
 };
 
+export type InvestmentDetails = {
+    title: string;
+    description: string;
+    budget: {
+        daily: string;
+        monthly: string;
+        breakdown: {
+            campaign: string;
+            value: string;
+        }[];
+    };
+    projections: {
+        title: string;
+        items: {
+            metric: string;
+            value: string;
+            description: string;
+        }[];
+    };
+    roi: {
+        title: string;
+        goal: string;
+        description: string;
+    };
+    scenarios: {
+        title: string;
+        items: {
+            name: string;
+            description: string;
+        }[];
+    };
+};
+
 export type CampaignPlan = {
   strategy: {
     title: string;
@@ -90,4 +123,5 @@ export type CampaignPlan = {
     futureProducts: Phase2Product[];
     audienceStrategy: Phase2Strategy;
   };
+  investment: InvestmentDetails;
 };

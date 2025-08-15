@@ -24,9 +24,12 @@ import {
   ShieldQuestion,
   Goal,
   Film,
-  Image as ImageIconLucide
+  Image as ImageIconLucide,
+  PiggyBank,
+  LineChart,
+  Coins
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience } from '@/lib/types';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails } from '@/lib/types';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -166,6 +169,79 @@ const CreativeCard = ({ creative }: { creative: CreativePlan }) => {
     </Card>
 )};
 
+const InvestmentCard = ({ investment }: { investment: InvestmentDetails }) => (
+    <Card>
+        <CardHeader>
+            <div className="flex items-center gap-3">
+                <PiggyBank className="w-6 h-6 text-primary" />
+                <CardTitle className="text-xl">{investment.title}</CardTitle>
+            </div>
+            <CardDescription className="pt-2">{investment.description}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+            <div>
+                <h3 className="font-semibold text-lg text-foreground mb-2">Orçamento Geral</h3>
+                <div className="grid grid-cols-2 gap-4 text-center">
+                    <div className="bg-card-foreground/5 p-3 rounded-lg">
+                        <p className="text-sm text-muted-foreground">Diário</p>
+                        <p className="text-2xl font-bold text-primary">{investment.budget.daily}</p>
+                    </div>
+                    <div className="bg-card-foreground/5 p-3 rounded-lg">
+                        <p className="text-sm text-muted-foreground">Mensal (Estimado)</p>
+                        <p className="text-2xl font-bold text-primary">{investment.budget.monthly}</p>
+                    </div>
+                </div>
+                <div className="mt-4 space-y-2">
+                    {investment.budget.breakdown.map(item => (
+                         <div key={item.campaign} className="flex justify-between items-center text-sm bg-card-foreground/5 p-2 rounded-md">
+                            <p className="text-muted-foreground">{item.campaign}</p>
+                            <p className="font-semibold text-foreground">{item.value}</p>
+                         </div>
+                    ))}
+                </div>
+            </div>
+             <div>
+                <h3 className="font-semibold text-lg text-foreground mb-3 flex items-center gap-2"><Coins className="w-5 h-5 text-accent" />{investment.projections.title}</h3>
+                <div className="space-y-2">
+                    {investment.projections.items.map(item => (
+                        <div key={item.metric} className="p-3 bg-card-foreground/5 rounded-lg">
+                            <div className="flex justify-between items-center">
+                                <p className="font-semibold text-foreground">{item.metric}</p>
+                                <p className="font-bold text-primary">{item.value}</p>
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-1">{item.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                 <h3 className="font-semibold text-lg text-foreground mb-3 flex items-center gap-2"><LineChart className="w-5 h-5 text-accent" />{investment.roi.title}</h3>
+                 <div className="p-4 bg-card-foreground/5 rounded-lg">
+                    <div className="flex justify-between items-center">
+                        <p className="font-semibold text-foreground">Meta de ROI</p>
+                        <p className="text-2xl font-bold text-primary">{investment.roi.goal}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">{investment.roi.description}</p>
+                 </div>
+            </div>
+
+            <div>
+                 <h3 className="font-semibold text-lg text-foreground mb-3 flex items-center gap-2"><TrendingUp className="w-5 h-5 text-accent" />{investment.scenarios.title}</h3>
+                <div className="space-y-3">
+                    {investment.scenarios.items.map(item => (
+                         <div key={item.name} className="p-3 border-l-4 border-primary/50 bg-card-foreground/5 rounded-r-lg">
+                            <p className="font-semibold text-foreground">{item.name}</p>
+                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                         </div>
+                    ))}
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+);
+
+
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [isMounted, setIsMounted] = useState(false);
@@ -216,8 +292,9 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             </header>
 
             <Tabs defaultValue="fase1" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="fase1">Fase 1: Lançamento Mind$ell</TabsTrigger>
+                 <TabsTrigger value="investimento">Investimento</TabsTrigger>
                 <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
               </TabsList>
               <TabsContent value="fase1" className="space-y-8 mt-8">
@@ -346,6 +423,9 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
+              </TabsContent>
+               <TabsContent value="investimento" className="space-y-8 mt-8">
+                    <InvestmentCard investment={plan.investment} />
               </TabsContent>
               <TabsContent value="fase2" className="space-y-8 mt-8">
                     <Card>
