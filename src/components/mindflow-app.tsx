@@ -460,7 +460,7 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="w-full">
+                    <div className="w-full overflow-auto">
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -670,7 +670,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
               <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="fase1">Fase 1: Lançamento</TabsTrigger>
                 <TabsTrigger value="acompanhamento">Acompanhamento</TabsTrigger>
-                 <TabsTrigger value="investimento">Investimento</TabsTrigger>
+                <TabsTrigger value="investimento">Investimento</TabsTrigger>
                 <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
               </TabsList>
               <TabsContent value="fase1" className="space-y-8 mt-8">
