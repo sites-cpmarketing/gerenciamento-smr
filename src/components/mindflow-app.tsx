@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
+import { Input } from '@/components/ui/input';
 import {
   Target,
   Gift,
@@ -283,12 +284,54 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
     </section>
   );
 
+type TrackingDataRow = {
+  id: number;
+  period: string;
+  investment: number;
+  leads: number;
+  ebookSales: number;
+  trainingSales: number;
+  revenue: number;
+};
+
 const CampaignTracking = () => {
-    // Mock data for demonstration
-    const trackingData = [
-      { id: 1, period: "Semana 1 (01-07 Jul)", investment: "R$ 126,00", clicks: 150, leads: 32, cpl: "R$ 3,94", ebookSales: 5, trainingSales: 1, cpaEbook: "R$ 18,00", cpaTraining: "R$ 36,00", revenue: "R$ 196,50", roi: "0.56" },
-      { id: 2, period: "Semana 2 (08-14 Jul)", investment: "R$ 126,00", clicks: 0, leads: 0, cpl: "N/A", ebookSales: 0, trainingSales: 0, cpaEbook: "N/A", cpaTraining: "N/A", revenue: "R$ 0,00", roi: "-1.00" },
+    const initialData: TrackingDataRow[] = [
+      { id: 1, period: "Semana 1 (01-07 Jul)", investment: 126, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
+      { id: 2, period: "Semana 2 (08-14 Jul)", investment: 126, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
     ];
+
+    const [trackingData, setTrackingData] = useState(initialData);
+
+    const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string) => {
+        const numericValue = parseFloat(value) || 0;
+        const updatedData = trackingData.map(row => {
+            if (row.id === id) {
+                return { ...row, [field]: numericValue };
+            }
+            return row;
+        });
+
+        // Recalculate revenue when sales change
+        if (field === 'ebookSales' || field === 'trainingSales') {
+             const updatedRow = updatedData.find(r => r.id === id);
+             if (updatedRow) {
+                 updatedRow.revenue = (updatedRow.ebookSales * 19.90) + (updatedRow.trainingSales * 97.00);
+             }
+        }
+
+        setTrackingData(updatedData);
+    };
+
+    const calculateCPL = (investment: number, leads: number) => {
+        if (leads === 0) return "N/A";
+        return `R$ ${(investment / leads).toFixed(2)}`;
+    };
+
+    const calculateROI = (investment: number, revenue: number) => {
+        if (investment === 0) return "N/A";
+        const roi = (revenue - investment) / investment;
+        return roi.toFixed(2);
+    };
 
     return (
         <section className="space-y-6">
@@ -307,8 +350,8 @@ const CampaignTracking = () => {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Período</TableHead>
-                                <TableHead>Investimento</TableHead>
+                                <TableHead className="w-[180px]">Período</TableHead>
+                                <TableHead>Investimento (R$)</TableHead>
                                 <TableHead>Leads</TableHead>
                                 <TableHead>CPL</TableHead>
                                 <TableHead>Vendas E-book</TableHead>
@@ -318,20 +361,31 @@ const CampaignTracking = () => {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {trackingData.map((row) => (
+                            {trackingData.map((row) => {
+                                const roi = calculateROI(row.investment, row.revenue);
+                                const roiValue = parseFloat(roi);
+                                return (
                                 <TableRow key={row.id}>
                                     <TableCell className="font-medium">{row.period}</TableCell>
-                                    <TableCell>{row.investment}</TableCell>
-                                    <TableCell>{row.leads}</TableCell>
-                                    <TableCell>{row.cpl}</TableCell>
-                                    <TableCell>{row.ebookSales}</TableCell>
-                                    <TableCell>{row.trainingSales}</TableCell>
-                                    <TableCell className="font-semibold">{row.revenue}</TableCell>
-                                    <TableCell className={`font-bold ${parseFloat(row.roi) >= 1.0 ? 'text-green-500' : 'text-red-500'}`}>
-                                      {row.roi}
+                                    <TableCell>
+                                      <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-20" />
+                                    </TableCell>
+                                    <TableCell>{calculateCPL(row.investment, row.leads)}</TableCell>
+                                    <TableCell>
+                                      <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-20" />
+                                    </TableCell>
+                                    <TableCell>
+                                      <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-20" />
+                                    </TableCell>
+                                    <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
+                                    <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
+                                      {roi}
                                     </TableCell>
                                 </TableRow>
-                            ))}
+                            )})}
                         </TableBody>
                         <TableCaption>Esta tabela será preenchida com dados reais das campanhas ativas.</TableCaption>
                     </Table>
@@ -589,5 +643,3 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         </div>
     );
 }
-
-    
