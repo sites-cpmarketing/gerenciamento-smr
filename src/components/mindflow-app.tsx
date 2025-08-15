@@ -83,7 +83,7 @@ const ChecklistGroupComponent = ({ group, checkedItems, onToggle }: { group: Che
 
 const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => {
     const formatDescription = (desc: string) => {
-        const parts = desc.split(/ (Interesses:|Comportamentos:|Fontes do Site:|Excluir:|Interesses em autores:)/g);
+        const parts = desc.split(/ (Demografia:|Interesses:|Comportamentos:|Fontes do Site:|Excluir:|Interesses em autores:)/g);
         const elements = [];
         let currentSection = "";
 

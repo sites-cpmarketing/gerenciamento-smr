@@ -38,14 +38,14 @@ export const campaignPlanData: CampaignPlan = {
       execution: {
         audience: {
           title: "Público Principal (Interesses)",
-          description: "Segmentação Detalhada > Interesses: 'Vendas', 'Técnicas de Vendas', 'Negociação', 'Programação Neurolinguística (PNL)', 'Persuasão', 'Empreendedorismo', 'Hotmart'. Interesses em autores: 'Tony Robbins', 'Dale Carnegie', 'Robert Cialdini'."
+          description: "Demografia: Idade: 25-50 anos. Localização: Brasil. Interesses: Vendas, Técnicas de Vendas, Negociação, Programação Neurolinguística (PNL), Persuasão, Empreendedorismo, Hotmart. Interesses em autores: Tony Robbins, Dale Carnegie, Robert Cialdini."
         },
         creatives: [
             {
               id: 'cr-1-1',
               format: 'Imagem Estática',
               title: "Venda Mais com Gatilhos Mentais",
-              description: "Use uma imagem de impacto com o título do e-book em destaque. Texto de apoio: 'Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.'",
+              description: "Imagem de impacto com o título do e-book em destaque. Texto de apoio: 'Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.'",
               purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
             },
             {
@@ -66,7 +66,7 @@ export const campaignPlanData: CampaignPlan = {
         planB: {
           audience: {
             title: "Público Alternativo (Comportamentos)",
-            description: "Segmentação Detalhada > Comportamentos: 'Compradores envolvidos'. Camada adicional de Interesses: 'Marketing digital', 'Pequenas empresas'. Excluir pessoas que já compraram o e-book."
+            description: "Demografia: Idade: 28-45 anos. Localização: Principais capitais (São Paulo, Rio de Janeiro, Belo Horizonte). Comportamentos: Compradores envolvidos. Camada adicional de Interesses: Marketing digital, Pequenas empresas. Excluir: Pessoas que já compraram o e-book."
           },
           creatives: [
             {
@@ -90,14 +90,14 @@ export const campaignPlanData: CampaignPlan = {
     {
       id: 'camp-2',
       title: "Campanha 2: Remarketing (Tráfego Quente)",
-      product: "E-book Mind$ell / Treinamento Mind$ell",
+      product: "E-book / Treinamento",
       platform: "Meta Ads",
       budget: "R$ 6,00/dia",
       description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, tanto no E-book quanto no Treinamento (upsell).",
       execution: {
         audience: {
           title: "Público Principal (Visitantes do Site)",
-          description: "Público Personalizado > Fontes do Site: Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias, mas não acionaram o evento de compra (Purchase)."
+          description: "Fontes do Site: Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias. Excluir: Compradores (evento de Purchase)."
         },
         creatives: [
             {
@@ -118,7 +118,7 @@ export const campaignPlanData: CampaignPlan = {
         planB: {
           audience: {
             title: "Público Alternativo (Compradores do E-book)",
-            description: "Público Personalizado > Lista de Clientes: Clientes que compraram o E-book nos últimos 30 dias. O objetivo é fazer o upsell para o treinamento completo."
+            description: "Fontes do Site: Público Personalizado de clientes que compraram o E-book nos últimos 30 dias. O objetivo é fazer o upsell para o treinamento completo."
           },
           creatives: [
             {
