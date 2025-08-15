@@ -250,7 +250,7 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
       </div>
       <Accordion type="multiple" className="w-full space-y-6">
         {flows.map(flow => (
-          <AccordionItem value={flow.id} key={flow.id}>
+          <AccordionItem value={flow.id} key={flow.id} className="bg-card border rounded-lg px-4">
             <AccordionTrigger>
               <div className="text-left">
                 <p className="text-xl font-bold">{flow.title}</p>
@@ -385,7 +385,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     </div>
                     <Accordion type="multiple" className="w-full space-y-6">
                         {plan.campaigns.map(campaign => (
-                             <AccordionItem value={campaign.id} key={campaign.id}>
+                             <AccordionItem value={campaign.id} key={campaign.id} className="bg-card border rounded-lg px-4">
                                 <AccordionTrigger>
                                   <div className="flex items-center gap-3 w-full">
                                       <div className="flex-grow text-left">
@@ -434,7 +434,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                 <EmailFlows flows={plan.emailFlows} />
 
                 <Accordion type="single" collapsible className="w-full space-y-6">
-                  <AccordionItem value="item-1">
+                  <AccordionItem value="item-1" className="bg-card border rounded-lg px-4">
                     <AccordionTrigger>
                       <div className="flex items-center gap-3">
                           <ListTodo className="w-7 h-7 text-primary" />

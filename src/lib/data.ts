@@ -186,6 +186,29 @@ export const campaignPlanData: CampaignPlan = {
           content: "Pede feedback sobre o treinamento e introduz sutilmente a importância da gestão financeira para o sucesso em vendas, plantando a semente para o 'Método Finance'."
         }
       ]
+    },
+    {
+      id: "flow-3",
+      title: "Fluxo de Remarketing (Recuperação de Vendas)",
+      audience: "Visitantes que acessaram a página de vendas (E-book ou Treinamento), mas não compraram.",
+      objective: "Recuperar o interesse do visitante, quebrar objeções comuns (preço, tempo, confiança) e usar a urgência e a prova social para incentivar a conclusão da compra.",
+      emails: [
+        {
+          id: "email-3-1",
+          subject: "Você esqueceu algo?",
+          content: "Lembrete amigável sobre o item que ele visitou. Reforça o benefício principal do produto (e-book ou treinamento) e oferece um link direto para finalizar a compra."
+        },
+        {
+          id: "email-3-2",
+          subject: "Ainda em dúvida? Veja o que dizem nossos alunos",
+          content: "Apresenta depoimentos ou estudos de caso para quebrar objeções e construir prova social. O foco é mostrar que o investimento vale a pena."
+        },
+        {
+          id: "email-3-3",
+          subject: "Sua oferta especial está prestes a expirar",
+          content: "Cria um senso de urgência real, oferecendo um bônus ou um desconto por tempo limitado (ex: 'últimas 24h'). A CTA é clara: 'Compre agora ou perca o benefício'."
+        }
+      ]
     }
   ],
   executionChecklist: [
