@@ -38,21 +38,45 @@ export const campaignPlanData: CampaignPlan = {
           title: "Público Principal (Interesses)",
           description: "Segmentação Detalhada > Interesses: 'Vendas', 'Técnicas de Vendas', 'Negociação', 'Programação Neurolinguística (PNL)', 'Persuasão', 'Empreendedorismo', 'Hotmart'. Interesses em autores: 'Tony Robbins', 'Dale Carnegie', 'Robert Cialdini'."
         },
-        creative: {
-          headline: "Venda Mais com Gatilhos Mentais",
-          text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.",
-          purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
-        },
+        creatives: [
+            {
+              id: 'cr-1-1',
+              headline: "Venda Mais com Gatilhos Mentais",
+              text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.",
+              purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
+            },
+            {
+              id: 'cr-1-2',
+              headline: "Seus Clientes Dizem 'Não'?",
+              text: "Aprenda a virar o jogo com técnicas de persuasão testadas. Este e-book revela os segredos para fechar mais negócios. Adquira já!",
+              purpose: "Foco na 'dor' (rejeição) para gerar conexão emocional. Ideal para quem se sente frustrado com os resultados atuais."
+            },
+            {
+              id: 'cr-1-3',
+              headline: "PNL para Vendedores",
+              text: "Transforme sua comunicação e entenda a mente do seu cliente. O E-book Mind$ell é o seu primeiro passo. Comece agora.",
+              purpose: "Foco na técnica (PNL) para atrair um público mais analítico e interessado em desenvolvimento profissional."
+            }
+        ],
         planB: {
           audience: {
             title: "Público Alternativo (Comportamentos)",
             description: "Segmentação Detalhada > Comportamentos: 'Compradores envolvidos'. Camada adicional de Interesses: 'Marketing digital', 'Pequenas empresas'. Excluir pessoas que já compraram o e-book."
           },
-          creative: {
-            headline: "O Segredo dos Vendedores de Sucesso",
-            text: "Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos mentais que fecham negócios. E-book por R$ 19,90.",
-            purpose: "Foco na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
-          }
+          creatives: [
+            {
+              id: 'cr-b-1-1',
+              headline: "O Segredo dos Vendedores de Sucesso",
+              text: "Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos mentais que fecham negócios. E-book por R$ 19,90.",
+              purpose: "Foco na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
+            },
+            {
+              id: 'cr-b-1-2',
+              headline: "Para Empreendedores que Vendem",
+              text: "Seu produto é ótimo, mas as vendas não decolam? O problema pode estar na sua abordagem. Aprenda a persuadir com nosso guia prático.",
+              purpose: "Foco em um nicho (empreendedores) com uma dor específica (vendas baixas)."
+            }
+          ]
         }
       }
     },
@@ -66,21 +90,39 @@ export const campaignPlanData: CampaignPlan = {
           title: "Público Principal (Visitantes do Site)",
           description: "Público Personalizado > Fontes do Site: Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias, mas não acionaram o evento de compra (Purchase)."
         },
-        creative: {
-          headline: "Você Chegou Perto. Finalize sua Compra.",
-          text: "Vimos que você se interessou pelo nosso material. Não perca a chance de transformar seus resultados. Complete seu pedido e comece a vender mais hoje.",
-          purpose: "Lembrete direto e com senso de urgência para recuperar carrinhos abandonados e visitantes indecisos."
-        },
+        creatives: [
+            {
+              id: 'cr-2-1',
+              headline: "Você Chegou Perto. Finalize sua Compra.",
+              text: "Vimos que você se interessou pelo nosso material. Não perca a chance de transformar seus resultados. Complete seu pedido e comece a vender mais hoje.",
+              purpose: "Lembrete direto e com senso de urgência para recuperar carrinhos abandonados e visitantes indecisos."
+            },
+            {
+              id: 'cr-2-2',
+              headline: "Sua Vaga no Treinamento Está Guardada",
+              text: "Faltou pouco para você se juntar aos vendedores que estão dominando a PNL. Finalize sua inscrição no Treinamento Mind$ell com uma condição especial.",
+              purpose: "Gera escassez e exclusividade para incentivar a conclusão da compra do treinamento."
+            }
+        ],
         planB: {
           audience: {
             title: "Público Alternativo (Compradores do E-book)",
             description: "Público Personalizado > Lista de Clientes: Clientes que compraram o E-book nos últimos 30 dias. O objetivo é fazer o upsell para o treinamento completo."
           },
-          creative: {
-            headline: "Você Deu o Primeiro Passo. Qual o Próximo?",
-            text: "Você aprendeu os gatilhos mentais do e-book. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
-            purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
-          }
+          creatives: [
+            {
+              id: 'cr-b-2-1',
+              headline: "Você Deu o Primeiro Passo. Qual o Próximo?",
+              text: "Você aprendeu os gatilhos mentais do e-book. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
+              purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
+            },
+            {
+              id: 'cr-b-2-2',
+              headline: "De Leitor a Especialista",
+              text: "O conhecimento do e-book foi só o começo. No Treinamento Mind$ell, você vai aplicar tudo na prática. Inscreva-se e vire um mestre da persuasão.",
+              purpose: "Foco na transformação e evolução do cliente, validando a compra anterior e incentivando a próxima."
+            }
+          ]
         }
       }
     },

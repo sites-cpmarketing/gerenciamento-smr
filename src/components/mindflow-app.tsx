@@ -16,17 +16,16 @@ import {
   ListTodo,
   DollarSign,
   MousePointerClick,
-  Mail,
   Lightbulb,
   Building,
   Rocket,
   TrendingUp,
   Users,
-  Image as ImageIcon,
+  ImageIcon,
   ShieldQuestion,
   Goal
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, Campaign, CreativePlan, Audience } from '@/lib/types';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience } from '@/lib/types';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -75,45 +74,67 @@ const ChecklistGroupComponent = ({ group, checkedItems, onToggle }: { group: Che
     );
 };
 
-const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => (
-    <Card>
-        <CardHeader>
-            <div className="flex items-center gap-3">
-                <Icon className="w-6 h-6 text-primary" />
-                <CardTitle>{title}</CardTitle>
-            </div>
-             <CardDescription className="pt-2 !mt-2 text-base">{audience.title}</CardDescription>
-            <CardDescription className="pt-1">{audience.description}</CardDescription>
-        </CardHeader>
-    </Card>
-);
+const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => {
+    const formatDescription = (desc: string) => {
+        const parts = desc.split(/ (Interesses:|Comportamentos:|Fontes do Site:|Excluir)/g);
+        const elements = [];
+        let currentSection = "";
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            if (part.endsWith(':')) {
+                if (currentSection) {
+                    elements.push(<p key={i-1} className="text-muted-foreground">{currentSection.trim()}</p>);
+                }
+                elements.push(<strong key={i} className="text-foreground pt-2 block">{part}</strong>);
+                currentSection = "";
+            } else {
+                currentSection += " " + part;
+            }
+        }
+        if (currentSection) {
+            elements.push(<p key={parts.length} className="text-muted-foreground">{currentSection.trim().replace(/ > /g, ' ')}</p>);
+        }
+        return elements.slice(1);
+    };
+
+    return (
+        <Card>
+            <CardHeader>
+                <div className="flex items-center gap-3">
+                    <Icon className="w-6 h-6 text-primary" />
+                    <CardTitle>{title}</CardTitle>
+                </div>
+                <CardDescription as="div" className="pt-2 !mt-2 space-y-1">
+                   {formatDescription(audience.description)}
+                </CardDescription>
+            </CardHeader>
+        </Card>
+    );
+};
 
 const CreativeCard = ({ creative, icon: Icon, title }: { creative: CreativePlan, icon: React.ComponentType<{className?: string}>, title: string }) => (
-    <Card>
+    <Card className="bg-card-foreground/5 border-l-4 border-primary">
         <CardHeader>
-             <div className="flex items-center gap-3">
-                <Icon className="w-6 h-6 text-primary" />
-                <CardTitle>{title}</CardTitle>
-            </div>
-            <CardDescription className="pt-2 !mt-2">
-                <strong className="text-foreground">Headline:</strong> {creative.headline}
-            </CardDescription>
-            <CardDescription className="pt-2">
-                <strong className="text-foreground">Texto Principal:</strong> {creative.text}
-            </CardDescription>
-            <CardDescription className="pt-2">
-                <strong className="text-foreground">Propósito:</strong> {creative.purpose}
+            <CardDescription as="div">
+                <strong className="text-foreground block text-base">{creative.headline}</strong>
+                <p className="pt-2">{creative.text}</p>
+                <div className="flex items-start gap-2 pt-3 mt-3 border-t border-border/50">
+                    <Lightbulb className="w-4 h-4 mt-1 text-accent shrink-0" />
+                    <p className="text-xs text-muted-foreground">
+                        <strong className="text-foreground/80">Propósito:</strong> {creative.purpose}
+                    </p>
+                </div>
             </CardDescription>
         </CardHeader>
     </Card>
 );
-
 
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [isMounted, setIsMounted] = useState(false);
 
-    const allActionItems = useMemo(() => 
+    const allActionItems = useMemo(() =>
         plan.executionChecklist.flatMap(group => group.items)
     , [plan]);
 
@@ -164,7 +185,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                 <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
               </TabsList>
               <TabsContent value="fase1" className="space-y-8 mt-8">
-                
+
                  <section className="space-y-6">
                     <div className="flex items-center gap-3">
                         <Gift className="w-7 h-7 text-primary" />
@@ -204,7 +225,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                         </CardHeader>
                     </Card>
                 </section>
-                
+
                 <section className="space-y-6">
                     <div className="flex items-center gap-3">
                         <Megaphone className="w-7 h-7 text-primary" />
@@ -228,17 +249,25 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                         <CardDescription className="pt-2">{campaign.description}</CardDescription>
                                       </CardHeader>
                                     </Card>
-                                    
+
                                     <h3 className="text-lg font-semibold text-primary pl-1">Plano Principal</h3>
-                                    <div className="grid gap-6 md:grid-cols-2">
+                                    <div className="grid gap-6">
                                        <AudienceCard audience={campaign.execution.audience} icon={Users} title="Público" />
-                                       <CreativeCard creative={campaign.execution.creative} icon={ImageIcon} title="Criativo" />
+                                       <div className="space-y-4">
+                                         {campaign.execution.creatives.map(creative => (
+                                            <CreativeCard key={creative.id} creative={creative} icon={ImageIcon} title="Criativo" />
+                                         ))}
+                                       </div>
                                     </div>
 
                                     <h3 className="text-lg font-semibold text-destructive pl-1">Plano B (Contingência)</h3>
-                                     <div className="grid gap-6 md:grid-cols-2">
+                                     <div className="grid gap-6">
                                        <AudienceCard audience={campaign.execution.planB.audience} icon={ShieldQuestion} title="Público Alternativo" />
-                                       <CreativeCard creative={campaign.execution.planB.creative} icon={ShieldQuestion} title="Criativo Alternativo" />
+                                       <div className="space-y-4">
+                                            {campaign.execution.planB.creatives.map(creative => (
+                                                <CreativeCard key={creative.id} creative={creative} icon={ShieldQuestion} title="Criativo Alternativo" />
+                                            ))}
+                                       </div>
                                     </div>
                                 </AccordionContent>
                              </AccordionItem>
@@ -309,7 +338,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                             ))}
                         </div>
                     </section>
-                    
+
                     <section className="space-y-6">
                         <div className="flex items-center gap-3">
                             <TrendingUp className="w-7 h-7 text-primary" />

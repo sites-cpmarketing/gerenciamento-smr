@@ -20,6 +20,7 @@ export type Offer = {
 };
 
 export type CreativePlan = {
+  id: string;
   headline: string;
   text: string;
   purpose: string;
@@ -32,10 +33,10 @@ export type Audience = {
 
 export type CampaignExecutionPlan = {
   audience: Audience;
-  creative: CreativePlan;
+  creatives: CreativePlan[];
   planB: {
     audience: Audience;
-    creative: CreativePlan;
+    creatives: CreativePlan[];
   }
 }
 
