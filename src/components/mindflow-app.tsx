@@ -59,7 +59,8 @@ import {
   LayoutDashboard,
   AreaChart,
   Banknote,
-  Telescope
+  Telescope,
+  ArrowRight
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
@@ -84,14 +85,27 @@ const creativeIcons: Record<CreativePlan['format'], React.ComponentType<{ classN
 const ChecklistItem = ({ item, isChecked, onToggle }: { item: ActionItem, isChecked: boolean, onToggle: (checked: boolean) => void }) => {
   const uniqueId = `check-${item.id}`;
   return (
-    <div className="flex items-center space-x-3 bg-card-foreground/5 p-3 rounded-lg border border-transparent transition-all hover:border-primary/50">
-      <Checkbox id={uniqueId} checked={isChecked} onCheckedChange={onToggle as (checked: CheckedState) => void} />
-      <label
-        htmlFor={uniqueId}
-        className={`text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 transition-colors ${isChecked ? 'text-muted-foreground line-through' : 'text-foreground'}`}
-      >
-        {item.text}
-      </label>
+    <div className="flex items-center justify-between space-x-3 bg-card-foreground/5 p-3 rounded-lg border border-transparent transition-all hover:border-primary/50">
+      <div className="flex items-center space-x-3">
+        <Checkbox id={uniqueId} checked={isChecked} onCheckedChange={onToggle as (checked: CheckedState) => void} />
+        <label
+          htmlFor={uniqueId}
+          className={`text-sm cursor-pointer font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 transition-colors ${isChecked ? 'text-muted-foreground line-through' : 'text-foreground'}`}
+        >
+          {item.text}
+        </label>
+      </div>
+       {item.link && (
+        <a href={item.link} onClick={(e) => {
+          e.preventDefault();
+          document.querySelector(item.link!)?.scrollIntoView({ behavior: 'smooth' });
+        }}>
+          <Button variant="ghost" size="sm" className="h-auto px-2 py-1 text-xs">
+            Ir para
+            <ArrowRight className="w-3 h-3 ml-1" />
+          </Button>
+        </a>
+      )}
     </div>
   );
 };
@@ -187,7 +201,7 @@ const CreativeCard = ({ creative }: { creative: CreativePlan }) => {
     };
 
     return (
-    <Card className="bg-card-foreground/5 border-l-4 border-primary">
+    <Card className="bg-card-foreground/5 border-l-4 border-primary" id={creative.id}>
         <CardHeader>
             <CardDescription as="div">
                 <div className="flex items-center gap-2 mb-2">
@@ -288,7 +302,7 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
       </div>
       <Accordion type="multiple" className="w-full space-y-6">
         {flows.map(flow => (
-          <AccordionItem value={flow.id} key={flow.id} className="bg-card border rounded-lg px-4">
+          <AccordionItem value={flow.id} key={flow.id} id={flow.id} className="bg-card border rounded-lg px-4 scroll-mt-20">
             <AccordionTrigger>
               <div className="text-left">
                 <p className="text-xl font-bold">{flow.title}</p>
@@ -825,7 +839,7 @@ function MainContent({ view, plan, checkedItems, handleCheckChange }: { view: Ac
                         </div>
                         <div className="grid gap-6 md:grid-cols-1">
                             {plan.offers.map(offer => (
-                                <Card key={offer.id}>
+                                <Card key={offer.id} id={offer.id} className="scroll-mt-20">
                                     <CardHeader>
                                         <div className="flex justify-between items-start">
                                           <CardTitle>{offer.title} - <span className="text-primary">{offer.price}</span></CardTitle>
@@ -865,7 +879,7 @@ function MainContent({ view, plan, checkedItems, handleCheckChange }: { view: Ac
                         </div>
                         <Accordion type="multiple" className="w-full space-y-6">
                             {plan.campaigns.map(campaign => (
-                                 <AccordionItem value={campaign.id} key={campaign.id} className="bg-card border rounded-lg px-4">
+                                 <AccordionItem value={campaign.id} key={campaign.id} id={campaign.id} className="bg-card border rounded-lg px-4 scroll-mt-20">
                                     <AccordionTrigger>
                                       <div className="flex items-center gap-3 w-full">
                                           <div className="flex-grow text-left">

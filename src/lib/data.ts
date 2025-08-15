@@ -216,8 +216,8 @@ export const campaignPlanData: CampaignPlan = {
       id: 'infra',
       title: "Infraestrutura e Páginas",
       items: [
-        { id: 'check-infra-1', text: "Desenvolver Landing Page de Vendas para o E-book Mind$ell" },
-        { id: 'check-infra-2', text: "Desenvolver Landing Page de Vendas para o Treinamento Mind$ell" },
+        { id: 'check-infra-1', text: "Desenvolver Landing Page de Vendas para o E-book Mind$ell", link: "#offer-1" },
+        { id: 'check-infra-2', text: "Desenvolver Landing Page de Vendas para o Treinamento Mind$ell", link: "#offer-2" },
         { id: 'check-infra-3', text: "Configurar e verificar o Pixel do Meta em ambas as Landing Pages" },
         { id: 'check-infra-4', text: "Configurar o domínio e garantir que os certificados SSL estão ativos" },
         { id: 'check-infra-5', text: "Integrar as páginas com o gateway de pagamento" }
@@ -227,28 +227,28 @@ export const campaignPlanData: CampaignPlan = {
       id: 'creatives',
       title: "Criativos para Campanhas",
       items: [
-        { id: 'check-cr-1', text: "Criar Imagem Estática 'Venda Mais com Gatilhos Mentais' para Campanha 1" },
-        { id: 'check-cr-2', text: "Produzir Vídeo 'Seus Clientes Dizem Não?' para Campanha 1" },
-        { id: 'check-cr-3', text: "Desenvolver Carrossel 'PNL para Vendedores' para Campanha 1" },
-        { id: 'check-cr-4', text: "Produzir Vídeo (Plano B) 'O Segredo dos Vendedores de Sucesso' para Campanha 1" },
-        { id: 'check-cr-5', text: "Criar Imagem Estática (Plano B) 'Para Empreendedores que Vendem' para Campanha 1" },
-        { id: 'check-cr-6', text: "Criar Imagem Estática 'Finalize sua Compra' para Campanha 2 (Remarketing)" },
-        { id: 'check-cr-7', text: "Produzir Vídeo 'Ainda dá tempo' para Campanha 2 (Remarketing)" },
-        { id: 'check-cr-8', text: "Criar Carrossel (Plano B) 'Você Deu o Primeiro Passo' para Campanha 2 (Remarketing)" },
-        { id: 'check-cr-9', text: "Produzir Vídeo (Plano B) 'De Leitor a Especialista' para Campanha 2 (Remarketing)" }
+        { id: 'check-cr-1', text: "Criar Imagem Estática 'Venda Mais com Gatilhos Mentais' para Campanha 1", link: "#cr-1-1" },
+        { id: 'check-cr-2', text: "Produzir Vídeo 'Seus Clientes Dizem Não?' para Campanha 1", link: "#cr-1-2" },
+        { id: 'check-cr-3', text: "Desenvolver Carrossel 'PNL para Vendedores' para Campanha 1", link: "#cr-1-3" },
+        { id: 'check-cr-4', text: "Produzir Vídeo (Plano B) 'O Segredo dos Vendedores de Sucesso' para Campanha 1", link: "#cr-b-1-1" },
+        { id: 'check-cr-5', text: "Criar Imagem Estática (Plano B) 'Para Empreendedores que Vendem' para Campanha 1", link: "#cr-b-1-2" },
+        { id: 'check-cr-6', text: "Criar Imagem Estática 'Finalize sua Compra' para Campanha 2 (Remarketing)", link: "#cr-2-1" },
+        { id: 'check-cr-7', text: "Produzir Vídeo 'Ainda dá tempo' para Campanha 2 (Remarketing)", link: "#cr-2-2" },
+        { id: 'check-cr-8', text: "Criar Carrossel (Plano B) 'Você Deu o Primeiro Passo' para Campanha 2 (Remarketing)", link: "#cr-b-2-1" },
+        { id: 'check-cr-9', text: "Produzir Vídeo (Plano B) 'De Leitor a Especialista' para Campanha 2 (Remarketing)", link: "#cr-b-2-2" }
       ]
     },
     {
       id: 'campaigns-setup',
       title: "Configuração de Campanhas (Meta Ads)",
       items: [
-        { id: 'check-camp-1', text: "Configurar 'Campanha 1: Captação Direta' com objetivo de Conversão" },
-        { id: 'check-camp-2', text: "Criar conjunto de anúncios para o público principal (Interesses) da Campanha 1" },
-        { id: 'check-camp-3', text: "Subir criativos 'Venda Mais', 'Seus Clientes Dizem Não?' e 'PNL para Vendedores' na Campanha 1" },
-        { id: 'check-camp-4', text: "Configurar 'Campanha 2: Remarketing' com objetivo de Conversão" },
-        { id: 'check-camp-5', text: "Criar público personalizado de visitantes do site (14 dias) para Campanha 2" },
-        { id: 'check-camp-6', text: "Subir criativos 'Finalize sua Compra' e 'Ainda dá tempo' na Campanha 2" },
-        { id: 'check-camp-7', text: "Criar público personalizado de compradores do E-book para o Plano B (Upsell)" },
+        { id: 'check-camp-1', text: "Configurar 'Campanha 1: Captação Direta' com objetivo de Conversão", link: "#camp-1" },
+        { id: 'check-camp-2', text: "Criar conjunto de anúncios para o público principal (Interesses) da Campanha 1", link: "#camp-1" },
+        { id: 'check-camp-3', text: "Subir criativos 'Venda Mais', 'Seus Clientes Dizem Não?' e 'PNL para Vendedores' na Campanha 1", link: "#camp-1" },
+        { id: 'check-camp-4', text: "Configurar 'Campanha 2: Remarketing' com objetivo de Conversão", link: "#camp-2" },
+        { id: 'check-camp-5', text: "Criar público personalizado de visitantes do site (14 dias) para Campanha 2", link: "#camp-2" },
+        { id: 'check-camp-6', text: "Subir criativos 'Finalize sua Compra' e 'Ainda dá tempo' na Campanha 2", link: "#camp-2" },
+        { id: 'check-camp-7', text: "Criar público personalizado de compradores do E-book para o Plano B (Upsell)", link: "#camp-2" },
         { id: 'check-camp-8', text: "Excluir público de compradores de todas as campanhas de captação e remarketing relevantes" }
       ]
     },
@@ -256,15 +256,15 @@ export const campaignPlanData: CampaignPlan = {
       id: 'emails',
       title: "Automação de E-mail (Fluxos)",
       items: [
-        { id: 'check-email-1', text: "Escrever e configurar e-mail 'O seu guia chegou! E agora?' no Fluxo Pós-Compra E-book" },
-        { id: 'check-email-2', text: "Escrever e configurar e-mail 'O segredo que não coube no e-book...' no Fluxo Pós-Compra E-book" },
-        { id: 'check-email-3', text: "Escrever e configurar e-mail 'Um convite especial para você' com cupom no Fluxo Pós-Compra E-book" },
-        { id: 'check-email-4', text: "Escrever e configurar e-mail de boas-vindas do Treinamento no Fluxo Pós-Compra Treinamento" },
-        { id: 'check-email-5', text: "Escrever e configurar e-mail 'Uma dica extra para seus estudos' no Fluxo Pós-Compra Treinamento" },
-        { id: 'check-email-6', text: "Escrever e configurar e-mail 'Como estão seus resultados?' no Fluxo Pós-Compra Treinamento" },
-        { id: 'check-email-7', text: "Escrever e configurar e-mail 'Você esqueceu algo?' no Fluxo de Remarketing" },
-        { id: 'check-email-8', text: "Escrever e configurar e-mail 'Ainda em dúvida?' com prova social no Fluxo de Remarketing" },
-        { id: 'check-email-9', text: "Escrever e configurar e-mail 'Sua oferta especial está prestes a expirar' no Fluxo de Remarketing" }
+        { id: 'check-email-1', text: "Escrever e configurar e-mail 'O seu guia chegou! E agora?' no Fluxo Pós-Compra E-book", link: "#flow-1" },
+        { id: 'check-email-2', text: "Escrever e configurar e-mail 'O segredo que não coube no e-book...' no Fluxo Pós-Compra E-book", link: "#flow-1" },
+        { id: 'check-email-3', text: "Escrever e configurar e-mail 'Um convite especial para você' com cupom no Fluxo Pós-Compra E-book", link: "#flow-1" },
+        { id: 'check-email-4', text: "Escrever e configurar e-mail de boas-vindas do Treinamento no Fluxo Pós-Compra Treinamento", link: "#flow-2" },
+        { id: 'check-email-5', text: "Escrever e configurar e-mail 'Uma dica extra para seus estudos' no Fluxo Pós-Compra Treinamento", link: "#flow-2" },
+        { id: 'check-email-6', text: "Escrever e configurar e-mail 'Como estão seus resultados?' no Fluxo Pós-Compra Treinamento", link: "#flow-2" },
+        { id: 'check-email-7', text: "Escrever e configurar e-mail 'Você esqueceu algo?' no Fluxo de Remarketing", link: "#flow-3" },
+        { id: 'check-email-8', text: "Escrever e configurar e-mail 'Ainda em dúvida?' com prova social no Fluxo de Remarketing", link: "#flow-3" },
+        { id: 'check-email-9', text: "Escrever e configurar e-mail 'Sua oferta especial está prestes a expirar' no Fluxo de Remarketing", link: "#flow-3" }
       ]
     },
     {

@@ -4,6 +4,7 @@ export type ActionItem = {
   id: string;
   text: string;
   details?: string;
+  link?: string;
 };
 
 export type KpiMetric = 'CPL' | 'CTR' | 'CPA';
@@ -181,5 +182,3 @@ export const PerformanceAnalysisSchema = z.object({
   suggestions: z.array(z.string()).describe("A list of clear, actionable suggestions for optimization. Each suggestion should be a complete sentence and directly address a specific metric or observation. Prefix suggestions that require immediate attention with 'Atenção: '."),
 });
 export type PerformanceAnalysis = z.infer<typeof PerformanceAnalysisSchema>;
-
-    
