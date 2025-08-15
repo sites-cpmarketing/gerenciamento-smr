@@ -477,8 +477,8 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="w-full">
-                        <Table>
+                    <div className="w-full overflow-x-auto">
+                        <Table className="min-w-[1200px]">
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[180px]">Período</TableHead>
@@ -531,25 +531,25 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                           </Popover>
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell>{ctr}</TableCell>
                                         <TableCell>{cpc}</TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell>{cpl}</TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell>
-                                          <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-20" />
+                                          <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-24" />
                                         </TableCell>
                                         <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
                                         <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
@@ -918,8 +918,8 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             <SidebarInset>
                 <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-10">
                     <header className="flex justify-between items-center">
-                        <div className="text-left space-y-1">
-                            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
+                         <div className="text-left space-y-1">
+                            <h1 className="text-3xl sm:text-4xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">GERENCIAMENTO SMR</h1>
                             <p className="text-md text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
                         </div>
                         <SidebarTrigger className="md:hidden" />
