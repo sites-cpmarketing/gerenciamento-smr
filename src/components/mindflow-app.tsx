@@ -23,7 +23,9 @@ import {
   Users,
   ImageIcon,
   ShieldQuestion,
-  Goal
+  Goal,
+  Film,
+  Image as ImageIconLucide
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience } from '@/lib/types';
 
@@ -31,6 +33,11 @@ const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> =
   CPL: DollarSign,
   CTR: MousePointerClick,
   CPA: Target,
+};
+
+const creativeIcons: Record<CreativePlan['format'], React.ComponentType<{ className?: string }>> = {
+    'Vídeo': Film,
+    'Imagem Estática': ImageIconLucide,
 };
 
 const ChecklistItem = ({ item, isChecked, onToggle }: { item: ActionItem, isChecked: boolean, onToggle: (checked: boolean) => void }) => {
@@ -76,7 +83,7 @@ const ChecklistGroupComponent = ({ group, checkedItems, onToggle }: { group: Che
 
 const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => {
     const formatDescription = (desc: string) => {
-        const parts = desc.split(/ (Interesses:|Comportamentos:|Fontes do Site:|Excluir)/g);
+        const parts = desc.split(/ (Interesses:|Comportamentos:|Fontes do Site:|Excluir:|Interesses em autores:)/g);
         const elements = [];
         let currentSection = "";
 
@@ -113,12 +120,18 @@ const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, ico
     );
 };
 
-const CreativeCard = ({ creative, icon: Icon, title }: { creative: CreativePlan, icon: React.ComponentType<{className?: string}>, title: string }) => (
+const CreativeCard = ({ creative }: { creative: CreativePlan }) => {
+    const Icon = creativeIcons[creative.format];
+    return (
     <Card className="bg-card-foreground/5 border-l-4 border-primary">
         <CardHeader>
             <CardDescription as="div">
-                <strong className="text-foreground block text-base">{creative.headline}</strong>
-                <p className="pt-2">{creative.text}</p>
+                <div className="flex items-center gap-2 mb-2">
+                    <Icon className="w-5 h-5 text-primary" />
+                    <strong className="text-foreground text-base">{creative.title} ({creative.format})</strong>
+                </div>
+
+                <p className="pt-2">{creative.description}</p>
                 <div className="flex items-start gap-2 pt-3 mt-3 border-t border-border/50">
                     <Lightbulb className="w-4 h-4 mt-1 text-accent shrink-0" />
                     <p className="text-xs text-muted-foreground">
@@ -128,7 +141,7 @@ const CreativeCard = ({ creative, icon: Icon, title }: { creative: CreativePlan,
             </CardDescription>
         </CardHeader>
     </Card>
-);
+)};
 
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
@@ -238,7 +251,10 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                   <div className="flex items-center gap-3 w-full">
                                       <div className="flex-grow text-left">
                                           <p className="text-xl font-bold">{campaign.title}</p>
-                                          <Badge className="mt-2">{campaign.platform}</Badge>
+                                          <div className="flex items-center gap-4 mt-2">
+                                            <Badge>{campaign.platform}</Badge>
+                                            <Badge variant="secondary">Produto: {campaign.product}</Badge>
+                                          </div>
                                       </div>
                                   </div>
                                 </AccordionTrigger>
@@ -255,7 +271,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                        <AudienceCard audience={campaign.execution.audience} icon={Users} title="Público" />
                                        <div className="space-y-4">
                                          {campaign.execution.creatives.map(creative => (
-                                            <CreativeCard key={creative.id} creative={creative} icon={ImageIcon} title="Criativo" />
+                                            <CreativeCard key={creative.id} creative={creative} />
                                          ))}
                                        </div>
                                     </div>
@@ -265,7 +281,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                        <AudienceCard audience={campaign.execution.planB.audience} icon={ShieldQuestion} title="Público Alternativo" />
                                        <div className="space-y-4">
                                             {campaign.execution.planB.creatives.map(creative => (
-                                                <CreativeCard key={creative.id} creative={creative} icon={ShieldQuestion} title="Criativo Alternativo" />
+                                                <CreativeCard key={creative.id} creative={creative} />
                                             ))}
                                        </div>
                                     </div>

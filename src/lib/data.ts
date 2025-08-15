@@ -31,8 +31,9 @@ export const campaignPlanData: CampaignPlan = {
     {
       id: 'camp-1',
       title: "Campanha 1: Captação Direta (Tráfego Frio)",
+      product: "E-book Mind$ell",
       platform: "Meta Ads",
-      description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes com o E-book de baixo custo para validar a oferta e o público.",
+      description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes com o E-book de baixo custo (R$ 19,90) para validar a oferta e o público.",
       execution: {
         audience: {
           title: "Público Principal (Interesses)",
@@ -41,20 +42,23 @@ export const campaignPlanData: CampaignPlan = {
         creatives: [
             {
               id: 'cr-1-1',
-              headline: "Venda Mais com Gatilhos Mentais",
-              text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.",
+              format: 'Imagem Estática',
+              title: "Venda Mais com Gatilhos Mentais",
+              description: "Use uma imagem de impacto com o título do e-book em destaque. Texto de apoio: 'Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.'",
               purpose: "Foco no benefício direto (vender mais) e na rapidez. Ideal para quem busca resultados imediatos."
             },
             {
               id: 'cr-1-2',
-              headline: "Seus Clientes Dizem 'Não'?",
-              text: "Aprenda a virar o jogo com técnicas de persuasão testadas. Este e-book revela os segredos para fechar mais negócios. Adquira já!",
+              format: 'Vídeo',
+              title: "Seus Clientes Dizem 'Não'?",
+              description: "Vídeo curto (15-30s) mostrando uma pessoa frustrada com vendas e depois tendo uma 'luz' ao ler o e-book. Narração: 'Aprenda a virar o jogo com técnicas de persuasão testadas. Este e-book revela os segredos para fechar mais negócios. Adquira já!'",
               purpose: "Foco na 'dor' (rejeição) para gerar conexão emocional. Ideal para quem se sente frustrado com os resultados atuais."
             },
             {
               id: 'cr-1-3',
-              headline: "PNL para Vendedores",
-              text: "Transforme sua comunicação e entenda a mente do seu cliente. O E-book Mind$ell é o seu primeiro passo. Comece agora.",
+              format: 'Imagem Estática',
+              title: "PNL para Vendedores",
+              description: "Carrossel com 3 imagens: a primeira com a pergunta 'PNL funciona para vender?', a segunda com um gatilho mental explicado, e a terceira com a chamada para ação para o e-book.",
               purpose: "Foco na técnica (PNL) para atrair um público mais analítico e interessado em desenvolvimento profissional."
             }
         ],
@@ -66,14 +70,16 @@ export const campaignPlanData: CampaignPlan = {
           creatives: [
             {
               id: 'cr-b-1-1',
-              headline: "O Segredo dos Vendedores de Sucesso",
-              text: "Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos mentais que fecham negócios. E-book por R$ 19,90.",
-              purpose: "Foco na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
+              format: 'Vídeo',
+              title: "O Segredo dos Vendedores de Sucesso",
+              description: "Vídeo com depoimento rápido (simulado ou real) de alguém que leu o e-book e teve resultado. Legendas dinâmicas. Texto: 'Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos que fecham negócios.'",
+              purpose: "Foco na prova social e na 'dor' do público (rejeição em vendas) para gerar uma conexão emocional mais forte."
             },
             {
               id: 'cr-b-1-2',
-              headline: "Para Empreendedores que Vendem",
-              text: "Seu produto é ótimo, mas as vendas não decolam? O problema pode estar na sua abordagem. Aprenda a persuadir com nosso guia prático.",
+              format: 'Imagem Estática',
+              title: "Para Empreendedores que Vendem",
+              description: "Imagem mostrando o gráfico de vendas de uma empresa crescendo. Título: 'Seu produto é ótimo, mas as vendas não decolam? O problema pode estar na sua abordagem. Aprenda a persuadir com nosso guia prático.'",
               purpose: "Foco em um nicho (empreendedores) com uma dor específica (vendas baixas)."
             }
           ]
@@ -83,8 +89,9 @@ export const campaignPlanData: CampaignPlan = {
     {
       id: 'camp-2',
       title: "Campanha 2: Remarketing (Tráfego Quente)",
+      product: "E-book Mind$ell / Treinamento Mind$ell",
       platform: "Meta Ads",
-      description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, oferecendo o Treinamento como o próximo passo.",
+      description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, tanto no E-book quanto no Treinamento (upsell).",
       execution: {
         audience: {
           title: "Público Principal (Visitantes do Site)",
@@ -93,15 +100,17 @@ export const campaignPlanData: CampaignPlan = {
         creatives: [
             {
               id: 'cr-2-1',
-              headline: "Você Chegou Perto. Finalize sua Compra.",
-              text: "Vimos que você se interessou pelo nosso material. Não perca a chance de transformar seus resultados. Complete seu pedido e comece a vender mais hoje.",
+              format: 'Imagem Estática',
+              title: "Você Chegou Perto. Finalize sua Compra.",
+              description: "Imagem do produto que a pessoa visitou (E-book ou Treinamento) com um selo de 'Oferta Exclusiva'. Texto: 'Vimos que você se interessou. Não perca a chance de transformar seus resultados. Complete seu pedido e comece hoje.'",
               purpose: "Lembrete direto e com senso de urgência para recuperar carrinhos abandonados e visitantes indecisos."
             },
             {
               id: 'cr-2-2',
-              headline: "Sua Vaga no Treinamento Está Guardada",
-              text: "Faltou pouco para você se juntar aos vendedores que estão dominando a PNL. Finalize sua inscrição no Treinamento Mind$ell com uma condição especial.",
-              purpose: "Gera escassez e exclusividade para incentivar a conclusão da compra do treinamento."
+              format: 'Vídeo',
+              title: "Ainda dá tempo de garantir sua vaga",
+              description: "Vídeo curto do instrutor falando: 'Notei que você visitou nossa página do Treinamento Mind$ell. Quero pessoalmente te convidar para se juntar à nossa turma de especialistas. Finalize sua inscrição.'",
+              purpose: "Gera escassez e exclusividade para incentivar a conclusão da compra do treinamento, com um toque pessoal."
             }
         ],
         planB: {
@@ -112,14 +121,16 @@ export const campaignPlanData: CampaignPlan = {
           creatives: [
             {
               id: 'cr-b-2-1',
-              headline: "Você Deu o Primeiro Passo. Qual o Próximo?",
-              text: "Você aprendeu os gatilhos mentais do e-book. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
+              format: 'Imagem Estática',
+              title: "Você Deu o Primeiro Passo. Qual o Próximo?",
+              description: "Carrossel comparando o conteúdo do E-book (check ✓) com os módulos do Treinamento (o que ele vai aprender a mais). Texto: 'Você aprendeu os gatilhos mentais. Aprofunde com o Treinamento Mind$ell.'",
               purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
             },
             {
               id: 'cr-b-2-2',
-              headline: "De Leitor a Especialista",
-              text: "O conhecimento do e-book foi só o começo. No Treinamento Mind$ell, você vai aplicar tudo na prática. Inscreva-se e vire um mestre da persuasão.",
+              format: 'Vídeo',
+              title: "De Leitor a Especialista",
+              description: "Vídeo mostrando a 'jornada do herói': uma pessoa lendo o e-book e depois aplicando as técnicas com sucesso em uma reunião. Texto: 'O e-book foi só o começo. No Treinamento, você aplica na prática.'",
               purpose: "Foco na transformação e evolução do cliente, validando a compra anterior e incentivando a próxima."
             }
           ]

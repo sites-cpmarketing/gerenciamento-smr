@@ -21,8 +21,9 @@ export type Offer = {
 
 export type CreativePlan = {
   id: string;
-  headline: string;
-  text: string;
+  format: 'Vídeo' | 'Imagem Estática';
+  title: string;
+  description: string;
   purpose: string;
 }
 
@@ -43,6 +44,7 @@ export type CampaignExecutionPlan = {
 export type Campaign = {
   id: string;
   title: string;
+  product: string;
   platform: string;
   description: string;
   execution: CampaignExecutionPlan;
