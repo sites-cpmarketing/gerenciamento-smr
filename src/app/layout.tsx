@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: 'GERENCIAMENTO SMR',
-  description: 'Seu plano de campanha estratégico',
+  description: 'Painel de Controle da Campanha',
 };
 
 export default function RootLayout({

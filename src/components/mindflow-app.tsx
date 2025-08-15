@@ -14,6 +14,7 @@ import {
   ListTodo,
   DollarSign,
   MousePointerClick,
+  Instagram,
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric } from '@/lib/types';
 
@@ -21,6 +22,11 @@ const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> =
   CPL: DollarSign,
   CTR: MousePointerClick,
   CPA: Target,
+};
+
+const platformIcons: Record<string, React.ComponentType<{ className?: string }>> = {
+  "Meta Ads": Megaphone,
+  "Instagram (Orgânico)": Instagram,
 };
 
 const ChecklistItem = ({ item, isChecked, onToggle }: { item: ActionItem, isChecked: boolean, onToggle: (checked: boolean) => void }) => {
@@ -49,7 +55,6 @@ const KpiDisplay = ({ kpi }: { kpi: Kpi }) => {
   );
 };
 
-
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
     const [isMounted, setIsMounted] = useState(false);
@@ -66,7 +71,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
 
     useEffect(() => {
         try {
-            const storedState = localStorage.getItem('mindflow-checklist');
+            const storedState = localStorage.getItem('smr-checklist-progress');
             if (storedState) {
                 setCheckedItems(JSON.parse(storedState));
             }
@@ -78,7 +83,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
 
     useEffect(() => {
         if (isMounted) {
-            localStorage.setItem('mindflow-checklist', JSON.stringify(checkedItems));
+            localStorage.setItem('smr-checklist-progress', JSON.stringify(checkedItems));
         }
     }, [checkedItems, isMounted]);
 
@@ -98,7 +103,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         <div className="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8 space-y-10">
             <header className="text-center space-y-2">
                 <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
-                <p className="text-lg text-muted-foreground">Seu Painel de Controle de Campanha Estratégico</p>
+                <p className="text-lg text-muted-foreground">Painel de Controle da Campanha</p>
             </header>
             
             <Card className="shadow-lg">
@@ -106,7 +111,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     <div className="flex items-center gap-4">
                         <CheckCircle className="w-8 h-8 text-accent" />
                         <div>
-                            <CardTitle>Resumo do Progresso</CardTitle>
+                            <CardTitle>Progresso da Campanha</CardTitle>
                             <CardDescription>{completedTasks} de {totalTasks} tarefas concluídas</CardDescription>
                         </div>
                     </div>
@@ -125,7 +130,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Itens de Ação da Estratégia</h4>
+                    <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Afazeres da Estratégia</h4>
                     <div className="space-y-2">
                         {plan.strategy.actionItems.map(item => <ChecklistItem key={item.id} item={item} isChecked={!!checkedItems[item.id]} onToggle={(checked) => handleCheckChange(item.id, checked)} />)}
                     </div>
@@ -135,9 +140,9 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             <section className="space-y-6">
                 <div className="flex items-center gap-3">
                     <Gift className="w-7 h-7 text-primary" />
-                    <h2 className="text-2xl font-bold">Ofertas de Campanha</h2>
+                    <h2 className="text-2xl font-bold">Ofertas Ativas</h2>
                 </div>
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-1">
                     {plan.offers.map(offer => (
                         <Card key={offer.id}>
                             <CardHeader>
@@ -145,7 +150,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                 <CardDescription>{offer.description}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Itens de Ação</h4>
+                                <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Afazeres da Oferta</h4>
                                 <div className="space-y-2">
                                     {offer.actionItems.map(item => <ChecklistItem key={item.id} item={item} isChecked={!!checkedItems[item.id]} onToggle={(checked) => handleCheckChange(item.id, checked)} />)}
                                 </div>
@@ -158,28 +163,34 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
             <section className="space-y-6">
                 <div className="flex items-center gap-3">
                     <Megaphone className="w-7 h-7 text-primary" />
-                    <h2 className="text-2xl font-bold">Campanhas Ativas</h2>
+                    <h2 className="text-2xl font-bold">Frentes de Campanha</h2>
                 </div>
                 <div className="space-y-6">
-                    {plan.campaigns.map(campaign => (
-                        <Card key={campaign.id}>
-                            <CardHeader>
-                                <div className="flex justify-between items-start">
-                                    <CardTitle>{campaign.title}</CardTitle>
-                                    <Badge>{campaign.platform}</Badge>
-                                </div>
-                                <div className="flex flex-wrap gap-2 pt-2">
-                                    {campaign.kpis.map(kpi => <KpiDisplay key={kpi.metric} kpi={kpi} />)}
-                                </div>
-                            </CardHeader>
-                            <CardContent>
-                                <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Itens de Ação</h4>
-                                <div className="space-y-2">
-                                    {campaign.actionItems.map(item => <ChecklistItem key={item.id} item={item} isChecked={!!checkedItems[item.id]} onToggle={(checked) => handleCheckChange(item.id, checked)} />)}
-                                </div>
-                            </CardContent>
-                        </Card>
-                    ))}
+                    {plan.campaigns.map(campaign => {
+                        const PlatformIcon = platformIcons[campaign.platform] || Megaphone;
+                        return (
+                            <Card key={campaign.id}>
+                                <CardHeader>
+                                    <div className="flex justify-between items-start">
+                                        <CardTitle>{campaign.title}</CardTitle>
+                                        <Badge>
+                                            <PlatformIcon className="w-4 h-4 mr-2" />
+                                            {campaign.platform}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2 pt-2">
+                                        {campaign.kpis.map(kpi => <KpiDisplay key={kpi.metric} kpi={kpi} />)}
+                                    </div>
+                                </CardHeader>
+                                <CardContent>
+                                    <h4 className="font-semibold mb-3 text-sm text-muted-foreground flex items-center gap-2"><ListTodo className="w-4 h-4" />Afazeres da Frente</h4>
+                                    <div className="space-y-2">
+                                        {campaign.actionItems.map(item => <ChecklistItem key={item.id} item={item} isChecked={!!checkedItems[item.id]} onToggle={(checked) => handleCheckChange(item.id, checked)} />)}
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        )
+                    })}
                 </div>
             </section>
         </div>
