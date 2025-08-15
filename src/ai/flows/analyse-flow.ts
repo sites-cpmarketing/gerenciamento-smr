@@ -3,8 +3,6 @@
  * @fileoverview Flow to analyze campaign performance data.
  *
  * - analyseCampaignPerformance: A function that takes campaign data and KPIs to provide intelligent insights.
- * - PerformanceAnalysisInput: The input type for the analyseCampaignPerformance function.
- * - PerformanceAnalysis: The return type for the analyseCampaignPerformance function.
  */
 import { ai } from '@/ai/genkit';
 import { PerformanceAnalysisInputSchema, PerformanceAnalysisSchema, type PerformanceAnalysis, type PerformanceAnalysisInput } from '@/lib/types';
@@ -52,7 +50,13 @@ const analyseCampaignPerformanceFlow = ai.defineFlow(
     outputSchema: PerformanceAnalysisSchema,
   },
   async (input) => {
-    const { output } = await analysisPrompt(input);
+    // Filter out rows with no investment to avoid noise in the analysis
+    const filteredData = input.data.filter(row => row.investment > 0);
+    const filteredInput = { ...input, data: filteredData };
+    
+    const { output } = await analysisPrompt(filteredInput);
     return output!;
   }
 );
+
+    

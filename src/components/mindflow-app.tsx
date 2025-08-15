@@ -36,11 +36,15 @@ import {
   BarChartHorizontal,
   Wand2,
   BrainCircuit,
-  AlertTriangle
+  AlertTriangle,
+  Trash2,
+  CalendarDays
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
 import { Skeleton } from './ui/skeleton';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -296,10 +300,31 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
       { id: 1, period: "Semana 1 (01-07 Jul)", investment: 126, impressions: 15000, clicks: 135, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
       { id: 2, period: "Semana 2 (08-14 Jul)", investment: 126, impressions: 0, clicks: 0, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
     ];
+    
+    type StoredAnalysis = PerformanceAnalysis & { id: string; date: string };
 
     const [trackingData, setTrackingData] = useState(initialData);
-    const [analysis, setAnalysis] = useState<PerformanceAnalysis | null>(null);
+    const [analyses, setAnalyses] = useState<StoredAnalysis[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
+
+    useEffect(() => {
+        setIsMounted(true);
+        try {
+            const storedAnalyses = localStorage.getItem('smr-analyses');
+            if (storedAnalyses) {
+                setAnalyses(JSON.parse(storedAnalyses));
+            }
+        } catch (error) {
+            console.error("Failed to parse analyses from localStorage", error);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (isMounted) {
+            localStorage.setItem('smr-analyses', JSON.stringify(analyses));
+        }
+    }, [analyses, isMounted]);
 
     const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string) => {
         const numericValue = parseInt(value) || 0;
@@ -310,7 +335,6 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
             return row;
         });
 
-        // Recalculate revenue when sales change
         updatedData = updatedData.map(row => {
             if(row.id === id && (field === 'ebookSales' || field === 'trainingSales')) {
                  const revenue = (row.ebookSales * 19.90) + (row.trainingSales * 97.00);
@@ -345,22 +369,33 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
 
     const handleAnalyse = useCallback(async () => {
         setIsLoading(true);
-        setAnalysis(null);
         try {
             const result = await analyseCampaignPerformance({
                 kpis: plan.kpis,
-                data: trackingData,
+                data: trackingData.filter(d => d.investment > 0),
             });
-            setAnalysis(result);
+            const newAnalysis: StoredAnalysis = {
+                ...result,
+                id: new Date().toISOString(),
+                date: new Date().toISOString(),
+            };
+            setAnalyses(prev => [newAnalysis, ...prev]);
         } catch (error) {
             console.error("Error analysing performance:", error);
-            setAnalysis({
+             const errorAnalysis: StoredAnalysis = {
+                id: new Date().toISOString(),
+                date: new Date().toISOString(),
                 summary: "Ocorreu um erro ao analisar os dados. Por favor, tente novamente.",
                 suggestions: []
-            });
+            };
+            setAnalyses(prev => [errorAnalysis, ...prev]);
         }
         setIsLoading(false);
     }, [trackingData, plan.kpis]);
+    
+    const handleDeleteAnalysis = (id: string) => {
+        setAnalyses(prev => prev.filter(a => a.id !== id));
+    };
 
 
     return (
@@ -461,28 +496,40 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                     </Card>
                 )}
 
-                {analysis && !isLoading && (
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2"><BrainCircuit className="w-5 h-5 text-primary" /> Análise de Performance</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <p className="text-muted-foreground mb-6">{analysis.summary}</p>
-
-                            <div className="space-y-4">
-                                {analysis.suggestions.map((suggestion, index) => (
-                                    <Alert key={index} variant={suggestion.includes("Atenção") ? "destructive" : "default"}>
-                                       {suggestion.includes("Atenção") ? <AlertTriangle className="h-4 w-4" /> : <Lightbulb className="h-4 w-4" />}
-                                        <AlertTitle>{suggestion.includes("Atenção") ? "Ponto de Atenção" : "Sugestão de Otimização"}</AlertTitle>
-                                        <AlertDescription>
-                                            {suggestion.replace("Atenção: ", "")}
-                                        </AlertDescription>
-                                    </Alert>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-                )}
+                <div className="space-y-6 mt-6">
+                    {analyses.map((analysis) => (
+                        <Card key={analysis.id}>
+                            <CardHeader>
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <CardTitle className="flex items-center gap-2"><BrainCircuit className="w-5 h-5 text-primary" /> Análise de Performance</CardTitle>
+                                        <CardDescription className="flex items-center gap-2 mt-2">
+                                            <CalendarDays className="w-4 h-4"/>
+                                            {format(new Date(analysis.date), "dd 'de' MMMM 'de' yyyy, 'às' HH:mm", { locale: ptBR })}
+                                        </CardDescription>
+                                    </div>
+                                    <Button variant="ghost" size="icon" onClick={() => handleDeleteAnalysis(analysis.id)}>
+                                        <Trash2 className="w-4 h-4 text-destructive" />
+                                    </Button>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-muted-foreground mb-6">{analysis.summary}</p>
+                                <div className="space-y-4">
+                                    {analysis.suggestions.map((suggestion, index) => (
+                                        <Alert key={index} variant={suggestion.includes("Atenção") ? "destructive" : "default"}>
+                                           {suggestion.includes("Atenção") ? <AlertTriangle className="h-4 w-4" /> : <Lightbulb className="h-4 w-4" />}
+                                            <AlertTitle>{suggestion.includes("Atenção") ? "Ponto de Atenção" : "Sugestão de Otimização"}</AlertTitle>
+                                            <AlertDescription>
+                                                {suggestion.replace("Atenção: ", "")}
+                                            </AlertDescription>
+                                        </Alert>
+                                    ))}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
             </div>
         </section>
     );
@@ -736,3 +783,5 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
         </div>
     );
 }
+
+    
