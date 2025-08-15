@@ -38,7 +38,8 @@ import {
   BrainCircuit,
   AlertTriangle,
   Trash2,
-  CalendarDays
+  CalendarDays,
+  PlusCircle,
 } from 'lucide-react';
 import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
 import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
@@ -100,7 +101,7 @@ const ChecklistGroupComponent = ({ group, checkedItems, onToggle }: { group: Che
 
 const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => {
     const formatDescription = (desc: string) => {
-        const parts = desc.split(/(Demografia:|Interesses:|Comportamentos:|Fontes do Site:|Excluir:|Interesses em autores:)/g);
+        const parts = desc.split(/(Demografia:|Interesses:|Comportamentos:|Fontes do Site:|Excluir:|Interesses em autores:|Idade:|Localização:)/g);
         const elements = [];
         let currentSection = "";
 
@@ -302,8 +303,8 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     ];
     
     type StoredAnalysis = PerformanceAnalysis & { id: string; date: string };
-
-    const [trackingData, setTrackingData] = useState(initialData);
+    
+    const [trackingData, setTrackingData] = useState<TrackingDataRow[]>([]);
     const [analyses, setAnalyses] = useState<StoredAnalysis[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
@@ -315,21 +316,29 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
             if (storedAnalyses) {
                 setAnalyses(JSON.parse(storedAnalyses));
             }
+            const storedTrackingData = localStorage.getItem('smr-tracking-data');
+            if (storedTrackingData) {
+                setTrackingData(JSON.parse(storedTrackingData));
+            } else {
+                setTrackingData(initialData);
+            }
         } catch (error) {
-            console.error("Failed to parse analyses from localStorage", error);
+            console.error("Failed to parse from localStorage", error);
+            setTrackingData(initialData);
         }
     }, []);
 
     useEffect(() => {
         if (isMounted) {
             localStorage.setItem('smr-analyses', JSON.stringify(analyses));
+            localStorage.setItem('smr-tracking-data', JSON.stringify(trackingData));
         }
-    }, [analyses, isMounted]);
+    }, [analyses, trackingData, isMounted]);
 
-    const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string) => {
-        const numericValue = parseInt(value) || 0;
+    const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string | number) => {
         let updatedData = trackingData.map(row => {
             if (row.id === id) {
+                const numericValue = typeof value === 'string' ? parseFloat(value) || 0 : value;
                 return { ...row, [field]: numericValue };
             }
             return row;
@@ -345,6 +354,30 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
 
         setTrackingData(updatedData);
     };
+
+    const handlePeriodChange = (id: number, value: string) => {
+         setTrackingData(trackingData.map(row => (row.id === id ? { ...row, period: value } : row)));
+    };
+    
+    const handleAddRow = () => {
+        const newRow: TrackingDataRow = {
+            id: new Date().getTime(),
+            period: `Semana ${trackingData.length + 1}`,
+            investment: 0,
+            impressions: 0,
+            clicks: 0,
+            leads: 0,
+            ebookSales: 0,
+            trainingSales: 0,
+            revenue: 0,
+        };
+        setTrackingData([...trackingData, newRow]);
+    };
+
+    const handleRemoveRow = (id: number) => {
+        setTrackingData(trackingData.filter(row => row.id !== id));
+    };
+
 
     const calculateCTR = (impressions: number, clicks: number) => {
         if (impressions === 0) return "0.00%";
@@ -412,7 +445,7 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="overflow-x-auto">
+                    <div className="w-full">
                         <Table>
                             <TableHeader>
                                 <TableRow>
@@ -428,6 +461,7 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                     <TableHead>Vendas Treinamento</TableHead>
                                     <TableHead>Receita</TableHead>
                                     <TableHead>ROI</TableHead>
+                                    <TableHead className="text-right">Ações</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -440,7 +474,9 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
 
                                     return (
                                     <TableRow key={row.id}>
-                                        <TableCell className="font-medium">{row.period}</TableCell>
+                                        <TableCell className="font-medium">
+                                          <Input type="text" value={row.period} onChange={e => handlePeriodChange(row.id, e.target.value)} className="w-36" />
+                                        </TableCell>
                                         <TableCell>
                                           <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
                                         </TableCell>
@@ -466,10 +502,20 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                         <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
                                           {roi}
                                         </TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="ghost" size="icon" onClick={() => handleRemoveRow(row.id)}>
+                                                <Trash2 className="w-4 h-4 text-destructive" />
+                                            </Button>
+                                        </TableCell>
                                     </TableRow>
                                 )})}
                             </TableBody>
-                            <TableCaption>Esta tabela será preenchida com dados reais das campanhas ativas.</TableCaption>
+                            <TableCaption>
+                                <Button variant="outline" onClick={handleAddRow}>
+                                    <PlusCircle className="mr-2 h-4 w-4" />
+                                    Adicionar Período
+                                </Button>
+                            </TableCaption>
                         </Table>
                     </div>
                 </CardContent>
