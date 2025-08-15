@@ -3,7 +3,7 @@ import type { CampaignPlan } from '@/lib/types';
 export const campaignPlanData: CampaignPlan = {
   strategy: {
     title: "Estratégia e Metas",
-    description: "Foco total na validação e venda dos produtos de entrada com o tema de Vendas e PNL. Objetivo: Validar a oferta do E-book e do Treinamento Mind$ell, alcançando um Retorno Sobre o Investimento (ROI) ≥ 1.0 no primeiro ciclo de 30 dias.",
+    description: "O foco central da Fase 1 é a validação da oferta e do funil de vendas dos produtos de entrada (E-book e Treinamento). A meta principal é atingir um Retorno Sobre o Investimento (ROI) de pelo menos 1.0. Isso significa que, para cada real investido em anúncios, deve retornar pelo menos um real em vendas, provando a sustentabilidade do modelo antes de escalar o investimento.",
   },
   offers: [
     {
@@ -24,9 +24,9 @@ export const campaignPlanData: CampaignPlan = {
   campaigns: [
     {
       id: 'camp-1',
-      title: "Campanha 1: Captação Direta (E-book + Treinamento)",
+      title: "Campanha 1: Captação Direta (Tráfego Frio)",
       platform: "Meta Ads",
-      description: "Objetivo de Conversão (Compra) com orçamento de R$ 12/dia, direcionando para ambos os produtos.",
+      description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes. O orçamento de R$ 12/dia será direcionado para um público frio (que ainda não conhece a marca) com interesse em Vendas e PNL. O sucesso será medido pelo CPL (Custo por Lead), que indica a eficiência em gerar cadastros, pelo CTR (Taxa de Cliques), que mostra o quão atraente são os anúncios, e pelo CPA (Custo por Aquisição) do E-book, garantindo que a venda do produto de entrada seja lucrativa.",
       kpis: [
         { metric: 'CPL', target: "≤ R$ 4,00" },
         { metric: 'CTR', target: "≥ 0,9%" },
@@ -36,9 +36,9 @@ export const campaignPlanData: CampaignPlan = {
     },
     {
       id: 'camp-2',
-      title: "Campanha 2: Remarketing",
+      title: "Campanha 2: Remarketing (Tráfego Quente)",
       platform: "Meta Ads",
-      description: "Objetivo de Conversão (Compra) com orçamento de R$ 6/dia, para visitantes e leads que não compraram.",
+      description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse (visitaram a página, clicaram no anúncio) mas não compraram. Com um orçamento menor (R$ 6/dia), exibiremos anúncios mais diretos e com provas sociais para esse público. A métrica principal é o CPA do Treinamento, que deve ser significativamente menor que o do tráfego frio, pois estamos falando com um público já engajado.",
       kpis: [
         { metric: 'CPA', target: "Treinamento: ≤ R$ 70,00" },
       ],
@@ -60,15 +60,15 @@ export const campaignPlanData: CampaignPlan = {
   creatives: [
       {
           id: 'creative-1',
-          for: "E-book Mind$ell",
+          for: "E-book Mind$ell (Captação)",
           headline: "Venda Mais com Gatilhos Mentais",
-          text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90."
+          text: "Propósito: Chamar a atenção do público-alvo com uma promessa clara e de resultado rápido (gatilhos mentais). O preço baixo (R$ 19,90) serve para quebrar a barreira inicial da compra e validar o interesse do cliente no tema. O texto foca na transformação imediata."
       },
       {
           id: 'creative-2',
-          for: "Treinamento Mind$ell",
+          for: "Treinamento Mind$ell (Remarketing)",
           headline: "Domine a Arte de Vender com PNL",
-          text: "Cansado de perder vendas? Aprenda técnicas de PNL para fechar mais negócios. Curso completo por R$ 97."
+          text: "Propósito: Impactar o usuário que já demonstrou interesse. A comunicação é mais direta ('Cansado de perder vendas?'), pois já sabemos sua dor. O objetivo é reforçar o valor do treinamento completo e usar o preço (R$ 97) como uma oportunidade de aprofundamento no conhecimento."
       }
   ],
   executionChecklist: [

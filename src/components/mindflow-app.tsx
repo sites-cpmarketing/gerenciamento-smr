@@ -214,7 +214,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                         <Lightbulb className="w-7 h-7 text-primary" />
                         <h2 className="text-2xl font-bold">Detalhamento dos Anúncios</h2>
                     </div>
-                    <div className="grid gap-6 md:grid-cols-2">
+                    <div className="grid gap-6 md:grid-cols-1">
                         {plan.creatives.map(creative => (
                             <Card key={creative.id}>
                                 <CardHeader>
@@ -222,7 +222,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                 </CardHeader>
                                 <CardContent className="space-y-2">
                                    <p className="text-sm"><strong>Headline:</strong> {creative.headline}</p>
-                                   <p className="text-sm text-muted-foreground"><strong>Texto:</strong> {creative.text}</p>
+                                   <p className="text-sm text-muted-foreground"><strong>Propósito:</strong> {creative.text}</p>
                                 </CardContent>
                             </Card>
                         ))}
