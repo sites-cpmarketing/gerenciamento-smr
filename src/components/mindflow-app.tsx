@@ -67,6 +67,8 @@ import { Skeleton } from './ui/skeleton';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { Label } from './ui/label';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -329,6 +331,8 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     const [analyses, setAnalyses] = useState<StoredAnalysis[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isMounted, setIsMounted] = useState(false);
+    const isMobile = useIsMobile();
+
 
     useEffect(() => {
         setIsMounted(true);
@@ -385,8 +389,10 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     
     const handleAddRow = () => {
         const lastRow = trackingData[trackingData.length - 1];
-        const newPeriod = new Date(lastRow.period);
-        newPeriod.setDate(newPeriod.getDate() + 7);
+        const newPeriod = lastRow ? new Date(lastRow.period) : new Date();
+        if(lastRow) {
+            newPeriod.setDate(newPeriod.getDate() + 7);
+        }
 
         const newRow: TrackingDataRow = {
             id: new Date().getTime(),
@@ -461,6 +467,168 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     const handleDeleteAnalysis = (id: string) => {
         setAnalyses(prev => prev.filter(a => a.id !== id));
     };
+    
+    const renderRowContent = (row: TrackingDataRow, isMobile: boolean) => {
+      const roi = calculateROI(row.investment, row.revenue);
+      const roiValue = parseFloat(roi);
+      const ctr = calculateCTR(row.impressions, row.clicks);
+      const cpc = calculateCPC(row.investment, row.clicks);
+      const cpl = calculateCPL(row.investment, row.leads);
+
+      if (isMobile) {
+        return (
+          <Card key={row.id} className="mb-4">
+              <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <div>
+                        <Label>Período</Label>
+                        <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "w-full justify-start text-left font-normal mt-1",
+                              !row.period && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {row.period ? format(row.period, "dd/MM/yy") : <span>Escolha a data</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0">
+                          <Calendar
+                            mode="single"
+                            selected={row.period}
+                            onSelect={(date) => handleDataChange(row.id, 'period', date || new Date())}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                     <Button variant="ghost" size="icon" onClick={() => handleRemoveRow(row.id)}>
+                        <Trash2 className="w-4 h-4 text-destructive" />
+                    </Button>
+                  </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor={`investment-${row.id}`}>Invest.</Label>
+                      <Input id={`investment-${row.id}`} type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} />
+                    </div>
+                     <div className="space-y-1">
+                      <Label htmlFor={`impressions-${row.id}`}>Impr.</Label>
+                      <Input id={`impressions-${row.id}`} type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} />
+                    </div>
+                 </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor={`clicks-${row.id}`}>Cliques</Label>
+                      <Input id={`clicks-${row.id}`} type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor={`leads-${row.id}`}>Leads</Label>
+                      <Input id={`leads-${row.id}`} type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} />
+                    </div>
+                 </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor={`ebook-${row.id}`}>V. Ebook</Label>
+                      <Input id={`ebook-${row.id}`} type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor={`training-${row.id}`}>V. Trein.</Label>
+                      <Input id={`training-${row.id}`} type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} />
+                    </div>
+                 </div>
+                 <div className="border-t pt-4 mt-4 space-y-2">
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">CTR:</span>
+                      <span className="font-semibold">{ctr}</span>
+                    </div>
+                     <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">CPC:</span>
+                      <span className="font-semibold">{cpc}</span>
+                    </div>
+                     <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">CPL:</span>
+                      <span className="font-semibold">{cpl}</span>
+                    </div>
+                     <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">Receita:</span>
+                      <span className="font-bold text-primary">R$ {row.revenue.toFixed(2)}</span>
+                    </div>
+                     <div className="flex justify-between items-center text-sm">
+                      <span className="text-muted-foreground">ROI:</span>
+                       <span className={`font-bold text-base ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
+                          {roi}
+                        </span>
+                    </div>
+                 </div>
+              </CardContent>
+          </Card>
+        );
+      }
+
+      return (
+        <TableRow key={row.id}>
+            <TableCell className="font-medium">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[140px] justify-start text-left font-normal",
+                      !row.period && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {row.period ? format(row.period, "dd/MM/yy") : <span>Escolha a data</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={row.period}
+                    onSelect={(date) => handleDataChange(row.id, 'period', date || new Date())}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </TableCell>
+            <TableCell>
+              <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-20" />
+            </TableCell>
+            <TableCell>
+              <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-24" />
+            </TableCell>
+            <TableCell>
+              <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-20" />
+            </TableCell>
+            <TableCell>{ctr}</TableCell>
+            <TableCell>{cpc}</TableCell>
+            <TableCell>
+              <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-20" />
+            </TableCell>
+            <TableCell>{cpl}</TableCell>
+            <TableCell>
+              <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-20" />
+            </TableCell>
+            <TableCell>
+              <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-20" />
+            </TableCell>
+            <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
+            <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
+              {roi}
+            </TableCell>
+            <TableCell className="text-right">
+                <Button variant="ghost" size="icon" onClick={() => handleRemoveRow(row.id)}>
+                    <Trash2 className="w-4 h-4 text-destructive" />
+                </Button>
+            </TableCell>
+        </TableRow>
+      )
+    };
 
 
     return (
@@ -477,11 +645,12 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="w-full overflow-x-auto">
-                        <Table className="min-w-[1200px]">
+                    {/* Desktop View */}
+                    <div className="w-full overflow-x-auto hidden md:block">
+                        <Table className="min-w-full">
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead className="w-[180px]">Período</TableHead>
+                                    <TableHead className="w-[160px]">Período</TableHead>
                                     <TableHead>Invest.</TableHead>
                                     <TableHead>Impr.</TableHead>
                                     <TableHead>Cliques</TableHead>
@@ -497,79 +666,21 @@ const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {trackingData.map((row) => {
-                                    const roi = calculateROI(row.investment, row.revenue);
-                                    const roiValue = parseFloat(roi);
-                                    const ctr = calculateCTR(row.impressions, row.clicks);
-                                    const cpc = calculateCPC(row.investment, row.clicks);
-                                    const cpl = calculateCPL(row.investment, row.leads);
-
-                                    return (
-                                    <TableRow key={row.id}>
-                                        <TableCell className="font-medium">
-                                          <Popover>
-                                            <PopoverTrigger asChild>
-                                              <Button
-                                                variant={"outline"}
-                                                className={cn(
-                                                  "w-[150px] justify-start text-left font-normal",
-                                                  !row.period && "text-muted-foreground"
-                                                )}
-                                              >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {row.period ? format(row.period, "dd/MM/yy") : <span>Escolha a data</span>}
-                                              </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent className="w-auto p-0">
-                                              <Calendar
-                                                mode="single"
-                                                selected={row.period}
-                                                onSelect={(date) => handleDataChange(row.id, 'period', date || new Date())}
-                                                initialFocus
-                                              />
-                                            </PopoverContent>
-                                          </Popover>
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell>{ctr}</TableCell>
-                                        <TableCell>{cpc}</TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell>{cpl}</TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell>
-                                          <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-24" />
-                                        </TableCell>
-                                        <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
-                                        <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
-                                          {roi}
-                                        </TableCell>
-                                        <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" onClick={() => handleRemoveRow(row.id)}>
-                                                <Trash2 className="w-4 h-4 text-destructive" />
-                                            </Button>
-                                        </TableCell>
-                                    </TableRow>
-                                )})}
+                                {trackingData.map((row) => renderRowContent(row, false))}
                             </TableBody>
-                            <TableCaption>
-                                <Button variant="outline" onClick={handleAddRow}>
-                                    <PlusCircle className="mr-2 h-4 w-4" />
-                                    Adicionar Período
-                                </Button>
-                            </TableCaption>
                         </Table>
+                    </div>
+
+                    {/* Mobile View */}
+                    <div className="md:hidden space-y-4">
+                        {trackingData.map((row) => renderRowContent(row, true))}
+                    </div>
+
+                    <div className="mt-4 text-center">
+                        <Button variant="outline" onClick={handleAddRow}>
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Adicionar Período
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
