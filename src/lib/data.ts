@@ -66,7 +66,7 @@ export const campaignPlanData: CampaignPlan = {
         planB: {
           audience: {
             title: "Público Alternativo (Comportamentos)",
-            description: "Demografia: Idade: 28-45 anos. Localização: Principais capitais (São Paulo, Rio de Janeiro, Belo Horizonte). Comportamentos: Compradores envolvidos. Camada adicional de Interesses: Marketing digital, Pequenas empresas. Excluir: Pessoas que já compraram o e-book."
+            description: "Demografia: Idade: 28-45 anos. Localização: Principais capitais (São Paulo, Rio de Janeiro, Belo Horizonte). Comportamentos: Compradores envolvidos. Interesses: Marketing digital, Pequenas empresas. Excluir: Pessoas que já compraram o e-book."
           },
           creatives: [
             {
