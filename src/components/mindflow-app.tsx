@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { CheckedState } from "@radix-ui/react-checkbox";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -10,6 +10,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Target,
   Gift,
@@ -32,8 +34,13 @@ import {
   Coins,
   Mails,
   BarChartHorizontal,
+  Wand2,
+  BrainCircuit,
+  AlertTriangle
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow } from '@/lib/types';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow } from '@/lib/types';
+import { analyseCampaignPerformance, PerformanceAnalysis } from '@/ai/flows/analyse-flow';
+import { Skeleton } from './ui/skeleton';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -284,27 +291,19 @@ const EmailFlows = ({ flows }: { flows: EmailFlow[] }) => (
     </section>
   );
 
-type TrackingDataRow = {
-  id: number;
-  period: string;
-  investment: number;
-  leads: number;
-  ebookSales: number;
-  trainingSales: number;
-  revenue: number;
-};
-
-const CampaignTracking = () => {
+const CampaignTracking = ({ plan }: { plan: CampaignPlan }) => {
     const initialData: TrackingDataRow[] = [
-      { id: 1, period: "Semana 1 (01-07 Jul)", investment: 126, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
-      { id: 2, period: "Semana 2 (08-14 Jul)", investment: 126, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
+      { id: 1, period: "Semana 1 (01-07 Jul)", investment: 126, impressions: 15000, clicks: 135, leads: 32, ebookSales: 5, trainingSales: 1, revenue: 196.50 },
+      { id: 2, period: "Semana 2 (08-14 Jul)", investment: 126, impressions: 0, clicks: 0, leads: 0, ebookSales: 0, trainingSales: 0, revenue: 0 },
     ];
 
     const [trackingData, setTrackingData] = useState(initialData);
+    const [analysis, setAnalysis] = useState<PerformanceAnalysis | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleDataChange = (id: number, field: keyof TrackingDataRow, value: string) => {
-        const numericValue = parseFloat(value) || 0;
-        const updatedData = trackingData.map(row => {
+        const numericValue = parseInt(value) || 0;
+        let updatedData = trackingData.map(row => {
             if (row.id === id) {
                 return { ...row, [field]: numericValue };
             }
@@ -312,15 +311,26 @@ const CampaignTracking = () => {
         });
 
         // Recalculate revenue when sales change
-        if (field === 'ebookSales' || field === 'trainingSales') {
-             const updatedRow = updatedData.find(r => r.id === id);
-             if (updatedRow) {
-                 updatedRow.revenue = (updatedRow.ebookSales * 19.90) + (updatedRow.trainingSales * 97.00);
-             }
-        }
+        updatedData = updatedData.map(row => {
+            if(row.id === id && (field === 'ebookSales' || field === 'trainingSales')) {
+                 const revenue = (row.ebookSales * 19.90) + (row.trainingSales * 97.00);
+                 return {...row, revenue };
+            }
+            return row;
+        });
 
         setTrackingData(updatedData);
     };
+
+    const calculateCTR = (impressions: number, clicks: number) => {
+        if (impressions === 0) return "0.00%";
+        return `${((clicks / impressions) * 100).toFixed(2)}%`;
+    }
+
+    const calculateCPC = (investment: number, clicks: number) => {
+        if (clicks === 0) return "N/A";
+        return `R$ ${(investment / clicks).toFixed(2)}`;
+    }
 
     const calculateCPL = (investment: number, leads: number) => {
         if (leads === 0) return "N/A";
@@ -332,6 +342,26 @@ const CampaignTracking = () => {
         const roi = (revenue - investment) / investment;
         return roi.toFixed(2);
     };
+
+    const handleAnalyse = useCallback(async () => {
+        setIsLoading(true);
+        setAnalysis(null);
+        try {
+            const result = await analyseCampaignPerformance({
+                kpis: plan.kpis,
+                data: trackingData,
+            });
+            setAnalysis(result);
+        } catch (error) {
+            console.error("Error analysing performance:", error);
+            setAnalysis({
+                summary: "Ocorreu um erro ao analisar os dados. Por favor, tente novamente.",
+                suggestions: []
+            });
+        }
+        setIsLoading(false);
+    }, [trackingData, plan.kpis]);
+
 
     return (
         <section className="space-y-6">
@@ -347,50 +377,113 @@ const CampaignTracking = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="w-[180px]">Período</TableHead>
-                                <TableHead>Investimento (R$)</TableHead>
-                                <TableHead>Leads</TableHead>
-                                <TableHead>CPL</TableHead>
-                                <TableHead>Vendas E-book</TableHead>
-                                <TableHead>Vendas Treinamento</TableHead>
-                                <TableHead>Receita</TableHead>
-                                <TableHead>ROI</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {trackingData.map((row) => {
-                                const roi = calculateROI(row.investment, row.revenue);
-                                const roiValue = parseFloat(roi);
-                                return (
-                                <TableRow key={row.id}>
-                                    <TableCell className="font-medium">{row.period}</TableCell>
-                                    <TableCell>
-                                      <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-20" />
-                                    </TableCell>
-                                    <TableCell>{calculateCPL(row.investment, row.leads)}</TableCell>
-                                    <TableCell>
-                                      <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-20" />
-                                    </TableCell>
-                                    <TableCell>
-                                      <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-20" />
-                                    </TableCell>
-                                    <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
-                                    <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
-                                      {roi}
-                                    </TableCell>
+                    <div className="overflow-x-auto">
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead className="min-w-[150px]">Período</TableHead>
+                                    <TableHead>Investimento (R$)</TableHead>
+                                    <TableHead>Impressões</TableHead>
+                                    <TableHead>Cliques</TableHead>
+                                    <TableHead>CTR</TableHead>
+                                    <TableHead>CPC</TableHead>
+                                    <TableHead>Leads</TableHead>
+                                    <TableHead>CPL</TableHead>
+                                    <TableHead>Vendas E-book</TableHead>
+                                    <TableHead>Vendas Treinamento</TableHead>
+                                    <TableHead>Receita</TableHead>
+                                    <TableHead>ROI</TableHead>
                                 </TableRow>
-                            )})}
-                        </TableBody>
-                        <TableCaption>Esta tabela será preenchida com dados reais das campanhas ativas.</TableCaption>
-                    </Table>
+                            </TableHeader>
+                            <TableBody>
+                                {trackingData.map((row) => {
+                                    const roi = calculateROI(row.investment, row.revenue);
+                                    const roiValue = parseFloat(roi);
+                                    const ctr = calculateCTR(row.impressions, row.clicks);
+                                    const cpc = calculateCPC(row.investment, row.clicks);
+                                    const cpl = calculateCPL(row.investment, row.leads);
+
+                                    return (
+                                    <TableRow key={row.id}>
+                                        <TableCell className="font-medium">{row.period}</TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.investment} onChange={e => handleDataChange(row.id, 'investment', e.target.value)} className="w-24" />
+                                        </TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.impressions} onChange={e => handleDataChange(row.id, 'impressions', e.target.value)} className="w-24" />
+                                        </TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.clicks} onChange={e => handleDataChange(row.id, 'clicks', e.target.value)} className="w-20" />
+                                        </TableCell>
+                                        <TableCell>{ctr}</TableCell>
+                                        <TableCell>{cpc}</TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.leads} onChange={e => handleDataChange(row.id, 'leads', e.target.value)} className="w-20" />
+                                        </TableCell>
+                                        <TableCell>{cpl}</TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.ebookSales} onChange={e => handleDataChange(row.id, 'ebookSales', e.target.value)} className="w-20" />
+                                        </TableCell>
+                                        <TableCell>
+                                          <Input type="number" value={row.trainingSales} onChange={e => handleDataChange(row.id, 'trainingSales', e.target.value)} className="w-20" />
+                                        </TableCell>
+                                        <TableCell className="font-semibold">R$ {row.revenue.toFixed(2)}</TableCell>
+                                        <TableCell className={`font-bold ${roiValue >= 1.0 ? 'text-green-500' : (roiValue >= 0 ? 'text-yellow-500' : 'text-red-500')}`}>
+                                          {roi}
+                                        </TableCell>
+                                    </TableRow>
+                                )})}
+                            </TableBody>
+                            <TableCaption>Esta tabela será preenchida com dados reais das campanhas ativas.</TableCaption>
+                        </Table>
+                    </div>
                 </CardContent>
             </Card>
+            <div className="space-y-4">
+                <Button onClick={handleAnalyse} disabled={isLoading}>
+                    {isLoading ? "Analisando..." : <> <Wand2 className="mr-2 h-4 w-4" /> Gerar Análise com IA </>}
+                </Button>
+
+                {isLoading && (
+                     <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><BrainCircuit className="w-5 h-5 text-primary" /> Análise de Performance</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                           <Skeleton className="h-4 w-full" />
+                           <Skeleton className="h-4 w-[80%]" />
+                           <div className="pt-4 space-y-3">
+                                <Skeleton className="h-8 w-1/3" />
+                                <Skeleton className="h-4 w-full" />
+                                <Skeleton className="h-4 w-full" />
+                           </div>
+                        </CardContent>
+                    </Card>
+                )}
+
+                {analysis && !isLoading && (
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2"><BrainCircuit className="w-5 h-5 text-primary" /> Análise de Performance</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <p className="text-muted-foreground mb-6">{analysis.summary}</p>
+
+                            <div className="space-y-4">
+                                {analysis.suggestions.map((suggestion, index) => (
+                                    <Alert key={index} variant={suggestion.includes("Atenção") ? "destructive" : "default"}>
+                                       {suggestion.includes("Atenção") ? <AlertTriangle className="h-4 w-4" /> : <Lightbulb className="h-4 w-4" />}
+                                        <AlertTitle>{suggestion.includes("Atenção") ? "Ponto de Atenção" : "Sugestão de Otimização"}</AlertTitle>
+                                        <AlertDescription>
+                                            {suggestion.replace("Atenção: ", "")}
+                                        </AlertDescription>
+                                    </Alert>
+                                ))}
+                            </div>
+                        </CardContent>
+                    </Card>
+                )}
+            </div>
         </section>
     );
 };
@@ -438,7 +531,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
     }
 
     return (
-        <div className="container mx-auto max-w-5xl p-4 sm:p-6 lg:p-8 space-y-10">
+        <div className="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-10">
             <header className="text-center space-y-2">
                 <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-primary">GERENCIAMENTO SMR</h1>
                 <p className="text-lg text-muted-foreground">Painel de Controle da Campanha Mind$ell & Finance</p>
@@ -581,7 +674,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                 </Accordion>
               </TabsContent>
                <TabsContent value="acompanhamento" className="space-y-8 mt-8">
-                    <CampaignTracking />
+                    <CampaignTracking plan={plan}/>
                </TabsContent>
                <TabsContent value="investimento" className="space-y-8 mt-8">
                     <InvestmentCard investment={plan.investment} />

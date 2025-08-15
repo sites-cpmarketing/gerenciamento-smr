@@ -138,3 +138,15 @@ export type CampaignPlan = {
   };
   investment: InvestmentDetails;
 };
+
+export type TrackingDataRow = {
+  id: number;
+  period: string;
+  investment: number;
+  impressions: number;
+  clicks: number;
+  leads: number;
+  ebookSales: number;
+  trainingSales: number;
+  revenue: number;
+};
