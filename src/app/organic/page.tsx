@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Check, Instagram, Mic, Video, FileText, Calendar, Lightbulb } from "lucide-react";
+import { Check, Instagram, Mic, Video, FileText, Lightbulb } from "lucide-react";
 
 // Mock data for organic content plan
 const organicPlan = {
