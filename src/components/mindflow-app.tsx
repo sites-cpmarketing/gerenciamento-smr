@@ -20,9 +20,13 @@ import {
   Lightbulb,
   Building,
   Rocket,
-  TrendingUp
+  TrendingUp,
+  Users,
+  Image as ImageIcon,
+  ShieldQuestion,
+  Goal
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup } from '@/lib/types';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, Campaign, CreativePlan, Audience } from '@/lib/types';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
   CPL: DollarSign,
@@ -56,7 +60,7 @@ const KpiDisplay = ({ kpi }: { kpi: Kpi }) => {
   );
 };
 
-const ChecklistGroup = ({ group, checkedItems, onToggle }: { group: ChecklistGroup, checkedItems: Record<string, boolean>, onToggle: (id: string, checked: boolean) => void }) => {
+const ChecklistGroupComponent = ({ group, checkedItems, onToggle }: { group: ChecklistGroup, checkedItems: Record<string, boolean>, onToggle: (id: string, checked: boolean) => void }) => {
     return (
         <Card>
             <CardHeader>
@@ -70,6 +74,39 @@ const ChecklistGroup = ({ group, checkedItems, onToggle }: { group: ChecklistGro
         </Card>
     );
 };
+
+const AudienceCard = ({ audience, icon: Icon, title }: { audience: Audience, icon: React.ComponentType<{className?: string}>, title: string }) => (
+    <Card>
+        <CardHeader>
+            <div className="flex items-center gap-3">
+                <Icon className="w-6 h-6 text-primary" />
+                <CardTitle>{title}</CardTitle>
+            </div>
+             <CardDescription className="pt-2 !mt-2 text-base">{audience.title}</CardDescription>
+            <CardDescription className="pt-1">{audience.description}</CardDescription>
+        </CardHeader>
+    </Card>
+);
+
+const CreativeCard = ({ creative, icon: Icon, title }: { creative: CreativePlan, icon: React.ComponentType<{className?: string}>, title: string }) => (
+    <Card>
+        <CardHeader>
+             <div className="flex items-center gap-3">
+                <Icon className="w-6 h-6 text-primary" />
+                <CardTitle>{title}</CardTitle>
+            </div>
+            <CardDescription className="pt-2 !mt-2">
+                <strong className="text-foreground">Headline:</strong> {creative.headline}
+            </CardDescription>
+            <CardDescription className="pt-2">
+                <strong className="text-foreground">Texto Principal:</strong> {creative.text}
+            </CardDescription>
+            <CardDescription className="pt-2">
+                <strong className="text-foreground">Propósito:</strong> {creative.purpose}
+            </CardDescription>
+        </CardHeader>
+    </Card>
+);
 
 
 export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
@@ -127,20 +164,11 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                 <TabsTrigger value="fase2">Fase 2: Expansão</TabsTrigger>
               </TabsList>
               <TabsContent value="fase1" className="space-y-8 mt-8">
-                <Card>
-                    <CardHeader>
-                        <div className="flex items-center gap-3">
-                            <Target className="w-6 h-6 text-primary" />
-                            <CardTitle className="text-xl">{plan.strategy.title}</CardTitle>
-                        </div>
-                        <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
-                    </CardHeader>
-                </Card>
-
-                <section className="space-y-6">
+                
+                 <section className="space-y-6">
                     <div className="flex items-center gap-3">
                         <Gift className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Ofertas e Posicionamento</h2>
+                        <h2 className="text-2xl font-bold">Produtos e Ofertas</h2>
                     </div>
                     <div className="grid gap-6 md:grid-cols-1">
                         {plan.offers.map(offer => (
@@ -160,73 +188,62 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                         ))}
                     </div>
                 </section>
+
+                <section className="space-y-6">
+                    <div className="flex items-center gap-3">
+                        <Goal className="w-7 h-7 text-primary" />
+                        <h2 className="text-2xl font-bold">Objetivos e Métricas (KPIs)</h2>
+                    </div>
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>{plan.strategy.title}</CardTitle>
+                            <CardDescription className="pt-2">{plan.strategy.description}</CardDescription>
+                            <div className="flex flex-wrap gap-2 pt-4">
+                                {plan.kpis.map(kpi => <KpiDisplay key={kpi.metric + kpi.target} kpi={kpi} />)}
+                            </div>
+                        </CardHeader>
+                    </Card>
+                </section>
                 
                 <section className="space-y-6">
                     <div className="flex items-center gap-3">
                         <Megaphone className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Campanhas e Públicos</h2>
+                        <h2 className="text-2xl font-bold">Campanhas e Planos de Execução</h2>
                     </div>
-                    <div className="space-y-6">
-                        {plan.campaigns.map(campaign => {
-                            return (
-                                <Card key={campaign.id}>
-                                    <CardHeader>
-                                        <CardTitle>{campaign.title}</CardTitle>
-                                        <Badge className="w-fit mt-2">
-                                            {campaign.platform}
-                                        </Badge>
+                    <Accordion type="multiple" className="w-full space-y-6">
+                        {plan.campaigns.map(campaign => (
+                             <AccordionItem value={campaign.id} key={campaign.id}>
+                                <AccordionTrigger>
+                                  <div className="flex items-center gap-3 w-full">
+                                      <div className="flex-grow text-left">
+                                          <p className="text-xl font-bold">{campaign.title}</p>
+                                          <Badge className="mt-2">{campaign.platform}</Badge>
+                                      </div>
+                                  </div>
+                                </AccordionTrigger>
+                                <AccordionContent className="pt-6 space-y-6">
+                                    <Card className="bg-card-foreground/5">
+                                      <CardHeader>
+                                        <CardTitle>Descrição da Campanha</CardTitle>
                                         <CardDescription className="pt-2">{campaign.description}</CardDescription>
-                                        <div className="flex flex-wrap gap-2 pt-2">
-                                            {campaign.kpis.map(kpi => <KpiDisplay key={kpi.metric + kpi.target} kpi={kpi} />)}
-                                        </div>
-                                    </CardHeader>
-                                </Card>
-                            )
-                        })}
-                         <Card>
-                            <CardHeader>
-                                <CardTitle>Público-Alvo (Vendas e PNL)</CardTitle>
-                                <CardDescription className="pt-2">Vendedores, empreendedores, coaches, consultores, profissionais de marketing. Interesses em: vendas, negociação, PNL, persuasão, desenvolvimento pessoal, Tony Robbins, Dale Carnegie.</CardDescription>
-                            </CardHeader>
-                        </Card>
-                    </div>
-                </section>
+                                      </CardHeader>
+                                    </Card>
+                                    
+                                    <h3 className="text-lg font-semibold text-primary pl-1">Plano Principal</h3>
+                                    <div className="grid gap-6 md:grid-cols-2">
+                                       <AudienceCard audience={campaign.execution.audience} icon={Users} title="Público" />
+                                       <CreativeCard creative={campaign.execution.creative} icon={ImageIcon} title="Criativo" />
+                                    </div>
 
-                <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Mail className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Fluxos de Automação de E-mail</h2>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-1">
-                        {plan.emailFlows.map(flow => (
-                            <Card key={flow.id}>
-                                <CardHeader>
-                                    <CardTitle>{flow.title}</CardTitle>
-                                    <CardDescription className="pt-2">{flow.description}</CardDescription>
-                                </CardHeader>
-                            </Card>
+                                    <h3 className="text-lg font-semibold text-destructive pl-1">Plano B (Contingência)</h3>
+                                     <div className="grid gap-6 md:grid-cols-2">
+                                       <AudienceCard audience={campaign.execution.planB.audience} icon={ShieldQuestion} title="Público Alternativo" />
+                                       <CreativeCard creative={campaign.execution.planB.creative} icon={ShieldQuestion} title="Criativo Alternativo" />
+                                    </div>
+                                </AccordionContent>
+                             </AccordionItem>
                         ))}
-                    </div>
-                </section>
-
-                 <section className="space-y-6">
-                    <div className="flex items-center gap-3">
-                        <Lightbulb className="w-7 h-7 text-primary" />
-                        <h2 className="text-2xl font-bold">Detalhamento dos Anúncios</h2>
-                    </div>
-                    <div className="grid gap-6 md:grid-cols-1">
-                        {plan.creatives.map(creative => (
-                            <Card key={creative.id}>
-                                <CardHeader>
-                                    <CardTitle>{creative.for}</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-2">
-                                   <p className="text-sm"><strong>Headline:</strong> {creative.headline}</p>
-                                   <p className="text-sm text-muted-foreground"><strong>Propósito:</strong> {creative.text}</p>
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                    </Accordion>
                 </section>
 
                 <Accordion type="single" collapsible className="w-full space-y-6">
@@ -254,7 +271,7 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                       </Card>
                       <div className="space-y-4">
                           {plan.executionChecklist.map(group => (
-                              <ChecklistGroup key={group.id} group={group} checkedItems={checkedItems} onToggle={handleCheckChange} />
+                              <ChecklistGroupComponent key={group.id} group={group} checkedItems={checkedItems} onToggle={handleCheckChange} />
                           ))}
                       </div>
                     </AccordionContent>

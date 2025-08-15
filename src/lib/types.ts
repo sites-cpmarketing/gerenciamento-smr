@@ -19,26 +19,32 @@ export type Offer = {
   valueProposition: string;
 };
 
-export type Creative = {
-  id: string;
-  for: string;
+export type CreativePlan = {
   headline: string;
   text: string;
-};
+  purpose: string;
+}
 
-export type EmailFlow = {
-  id: string;
+export type Audience = {
   title: string;
   description: string;
-};
+}
+
+export type CampaignExecutionPlan = {
+  audience: Audience;
+  creative: CreativePlan;
+  planB: {
+    audience: Audience;
+    creative: CreativePlan;
+  }
+}
 
 export type Campaign = {
   id: string;
   title: string;
   platform: string;
-  kpis: Kpi[];
-  actionItems: ActionItem[];
   description: string;
+  execution: CampaignExecutionPlan;
 };
 
 export type ChecklistGroup = {
@@ -71,10 +77,9 @@ export type CampaignPlan = {
     title: string;
     description: string;
   };
+  kpis: Kpi[];
   offers: Offer[];
   campaigns: Campaign[];
-  emailFlows: EmailFlow[];
-  creatives: Creative[];
   executionChecklist: ChecklistGroup[];
   phase2: {
     title: string;

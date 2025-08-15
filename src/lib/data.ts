@@ -5,6 +5,12 @@ export const campaignPlanData: CampaignPlan = {
     title: "Estratégia e Metas",
     description: "O foco central da Fase 1 é a validação da oferta e do funil de vendas dos produtos de entrada (E-book e Treinamento). A meta principal é atingir um Retorno Sobre o Investimento (ROI) de pelo menos 1.0. Isso significa que, para cada real investido em anúncios, deve retornar pelo menos um real em vendas, provando a sustentabilidade do modelo antes de escalar o investimento.",
   },
+  kpis: [
+    { metric: 'CPL', target: "≤ R$ 4,00" },
+    { metric: 'CTR', target: "≥ 0,9%" },
+    { metric: 'CPA', target: "E-book: ≤ R$ 20,00" },
+    { metric: 'CPA', target: "Treinamento: ≤ R$ 70,00" },
+  ],
   offers: [
     {
       id: 'offer-1',
@@ -26,50 +32,58 @@ export const campaignPlanData: CampaignPlan = {
       id: 'camp-1',
       title: "Campanha 1: Captação Direta (Tráfego Frio)",
       platform: "Meta Ads",
-      description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes. O orçamento de R$ 12/dia será direcionado para um público frio (que ainda não conhece a marca) com interesse em Vendas e PNL. O sucesso será medido pelo CPL (Custo por Lead), que indica a eficiência em gerar cadastros, pelo CTR (Taxa de Cliques), que mostra o quão atraente são os anúncios, e pelo CPA (Custo por Aquisição) do E-book, garantindo que a venda do produto de entrada seja lucrativa.",
-      kpis: [
-        { metric: 'CPL', target: "≤ R$ 4,00" },
-        { metric: 'CTR', target: "≥ 0,9%" },
-        { metric: 'CPA', target: "E-book: ≤ R$ 20,00" },
-      ],
-      actionItems: [],
+      description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes com o E-book de baixo custo para validar a oferta e o público.",
+      execution: {
+        audience: {
+          title: "Público Principal (Amplo)",
+          description: "Vendedores, empreendedores, coaches, consultores, profissionais de marketing. Interesses em: vendas, negociação, PNL, persuasão, desenvolvimento pessoal, Tony Robbins, Dale Carnegie."
+        },
+        creative: {
+          headline: "Venda Mais com Gatilhos Mentais",
+          text: "Descubra 5 gatilhos mentais para aplicar hoje e aumentar suas vendas. Baixe o guia completo por apenas R$ 19,90.",
+          purpose: "Chamar a atenção com uma promessa clara e de resultado rápido. O preço baixo quebra a barreira inicial da compra."
+        },
+        planB: {
+          audience: {
+            title: "Público Alternativo (Lookalike)",
+            description: "Público semelhante (1%) aos compradores do E-book. Será criado após as primeiras 50-100 vendas para encontrar pessoas com perfil idêntico aos clientes."
+          },
+          creative: {
+            headline: "O Segredo dos Vendedores de Sucesso",
+            text: "Cansado de ouvir 'não'? Existe uma forma de vender sem pressionar. Conheça os gatilhos mentais que fecham negócios. E-book por R$ 19,90.",
+            purpose: "Testar uma nova abordagem focada na 'dor' do público (rejeição) em vez de focar apenas no 'ganho' (vender mais)."
+          }
+        }
+      }
     },
     {
       id: 'camp-2',
       title: "Campanha 2: Remarketing (Tráfego Quente)",
       platform: "Meta Ads",
-      description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse (visitaram a página, clicaram no anúncio) mas não compraram. Com um orçamento menor (R$ 6/dia), exibiremos anúncios mais diretos e com provas sociais para esse público. A métrica principal é o CPA do Treinamento, que deve ser significativamente menor que o do tráfego frio, pois estamos falando com um público já engajado.",
-      kpis: [
-        { metric: 'CPA', target: "Treinamento: ≤ R$ 70,00" },
-      ],
-      actionItems: [],
-    },
-  ],
-  emailFlows: [
-      {
-          id: 'flow-1',
-          title: "Fluxo Pós-Compra E-book (Upsell)",
-          description: "Sequência de 3 e-mails para apresentar o Treinamento Mind$ell como o próximo passo lógico, oferecendo um desconto especial para quem já é cliente."
-      },
-      {
-          id: 'flow-2',
-          title: "Fluxo Pós-Compra Treinamento (Engajamento)",
-          description: "Sequência de 3 e-mails para dar as boas-vindas, entregar conteúdo de valor e preparar o terreno para a futura oferta do \"Método Finance\"."
-      }
-  ],
-  creatives: [
-      {
-          id: 'creative-1',
-          for: "E-book Mind$ell (Captação)",
-          headline: "Venda Mais com Gatilhos Mentais",
-          text: "Propósito: Chamar a atenção do público-alvo com uma promessa clara e de resultado rápido (gatilhos mentais). O preço baixo (R$ 19,90) serve para quebrar a barreira inicial da compra e validar o interesse do cliente no tema. O texto foca na transformação imediata."
-      },
-      {
-          id: 'creative-2',
-          for: "Treinamento Mind$ell (Remarketing)",
+      description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, oferecendo o Treinamento como o próximo passo.",
+      execution: {
+        audience: {
+          title: "Público Principal (Engajados)",
+          description: "Pessoas que visitaram a página de vendas do E-book ou do Treinamento nos últimos 14 dias, mas não compraram."
+        },
+        creative: {
           headline: "Domine a Arte de Vender com PNL",
-          text: "Propósito: Impactar o usuário que já demonstrou interesse. A comunicação é mais direta ('Cansado de perder vendas?'), pois já sabemos sua dor. O objetivo é reforçar o valor do treinamento completo e usar o preço (R$ 97) como uma oportunidade de aprofundamento no conhecimento."
+          text: "Você chegou perto. Transforme seu interesse em resultado. Domine técnicas de vendas e PNL para fechar negócios com confiança. Inscreva-se no treinamento completo.",
+          purpose: "Reforçar o valor do treinamento para um público que já conhece a oferta. A comunicação é direta e foca na decisão final."
+        },
+        planB: {
+          audience: {
+            title: "Público Alternativo (Compradores do E-book)",
+            description: "Clientes que compraram o E-book. O objetivo é fazer o upsell para o treinamento completo."
+          },
+          creative: {
+            headline: "Você Deu o Primeiro Passo. Qual o Próximo?",
+            text: "Você aprendeu os gatilhos mentais. Agora, aprofunde seu conhecimento com o Treinamento Mind$ell e tenha acesso a um método completo de vendas e PNL.",
+            purpose: "Utilizar a compra anterior como gancho para a próxima oferta, mostrando uma jornada de aprendizado clara e lógica."
+          }
+        }
       }
+    },
   ],
   executionChecklist: [
     {
