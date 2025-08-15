@@ -86,3 +86,88 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Animated 3D background */
+@keyframes move {
+  100% {
+      transform: translate3d(0, 0, 1px) rotate(360deg);
+  }
+}
+
+.background-3d {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: hsl(var(--background));
+  overflow: hidden;
+}
+
+.background-3d span {
+  width: 20vmin;
+  height: 20vmin;
+  border-radius: 20vmin;
+  backface-visibility: hidden;
+  position: absolute;
+  animation: move;
+  animation-duration: 45s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+
+.background-3d span:nth-child(1) {
+  color: hsl(var(--primary));
+  top: 5%;
+  left: 89%;
+  animation-duration: 40s;
+  animation-delay: -9s;
+  transform-origin: -14vw 22vh;
+  box-shadow: -40vmin 0 5.4629479509vmin currentColor;
+}
+.background-3d span:nth-child(2) {
+  color: hsl(var(--accent));
+  top: 98%;
+  left: 4%;
+  animation-duration: 18s;
+  animation-delay: -2s;
+  transform-origin: 5vw -1vh;
+  box-shadow: 40vmin 0 5.1587040432vmin currentColor;
+}
+.background-3d span:nth-child(3) {
+  color: hsl(var(--primary));
+  top: 73%;
+  left: 17%;
+  animation-duration: 11s;
+  animation-delay: -11s;
+  transform-origin: -15vw -10vh;
+  box-shadow: 40vmin 0 5.257324546vmin currentColor;
+}
+.background-3d span:nth-child(4) {
+  color: hsl(var(--primary));
+  top: 48%;
+  left: 63%;
+  animation-duration: 25s;
+  animation-delay: -20s;
+  transform-origin: -13vw 12vh;
+  box-shadow: -40vmin 0 5.5683794611vmin currentColor;
+}
+.background-3d span:nth-child(5) {
+  color: hsl(var(--accent));
+  top: 61%;
+  left: 97%;
+  animation-duration: 38s;
+  animation-delay: -32s;
+  transform-origin: -18vw -2vh;
+  box-shadow: -40vmin 0 5.578647587vmin currentColor;
+}
+.background-3d span:nth-child(6) {
+  color: hsl(var(--accent));
+  top: 89%;
+  left: 81%;
+  animation-duration: 38s;
+  animation-delay: -32s;
+  transform-origin: 2vw -17vh;
+  box-shadow: 40vmin 0 5.1485602737vmin currentColor;
+}

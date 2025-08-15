@@ -6,8 +6,16 @@ import Link from "next/link";
 
 export default function HubPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground flex items-center justify-center p-4">
-      <div className="w-full max-w-4xl mx-auto">
+    <main className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="background-3d">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+      <div className="w-full max-w-4xl mx-auto z-10">
         <header className="text-center mb-12">
             <h1 className="text-4xl sm:text-5xl font-headline font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary to-white">
                 SMR DASHBOARD
@@ -19,7 +27,7 @@ export default function HubPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Link href="/traffic" className="group">
-                <Card className="h-full hover:border-primary/80 hover:shadow-lg transition-all duration-300">
+                <Card className="h-full hover:border-primary/80 hover:shadow-lg transition-all duration-300 bg-card/80 backdrop-blur-sm">
                     <CardHeader>
                         <div className="flex items-center gap-4">
                             <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
@@ -44,7 +52,7 @@ export default function HubPage() {
             </Link>
 
             <Link href="/organic" className="group">
-                <Card className="h-full hover:border-primary/80 hover:shadow-lg transition-all duration-300">
+                <Card className="h-full hover:border-primary/80 hover:shadow-lg transition-all duration-300 bg-card/80 backdrop-blur-sm">
                     <CardHeader>
                          <div className="flex items-center gap-4">
                             <div className="p-3 bg-primary/10 border border-primary/20 rounded-lg">
