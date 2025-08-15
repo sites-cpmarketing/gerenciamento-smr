@@ -220,7 +220,8 @@ export const campaignPlanData: CampaignPlan = {
         { id: 'check-infra-2', text: "Desenvolver Landing Page de Vendas para o Treinamento Mind$ell", link: "#offer-2" },
         { id: 'check-infra-3', text: "Configurar e verificar o Pixel do Meta em ambas as Landing Pages" },
         { id: 'check-infra-4', text: "Configurar o domínio e garantir que os certificados SSL estão ativos" },
-        { id: 'check-infra-5', text: "Integrar as páginas com o gateway de pagamento" }
+        { id: 'check-infra-5', text: "Integrar as páginas com o gateway de pagamento" },
+        { id: 'check-infra-6', text: "Configurar web push com intenção de saída nas Landing Pages (via RD Station)", link: "#flow-3" }
       ]
     },
     {
