@@ -253,7 +253,8 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                                           <p className="text-xl font-bold">{campaign.title}</p>
                                           <div className="flex items-center gap-4 mt-2">
                                             <Badge>{campaign.platform}</Badge>
-                                            <Badge variant="secondary">Produto: {campaign.product}</Badge>
+                                            <Badge variant="secondary">Orçamento: {campaign.budget}</Badge>
+                                            <Badge variant="outline">Produto: {campaign.product}</Badge>
                                           </div>
                                       </div>
                                   </div>

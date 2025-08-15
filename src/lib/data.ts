@@ -33,6 +33,7 @@ export const campaignPlanData: CampaignPlan = {
       title: "Campanha 1: Captação Direta (Tráfego Frio)",
       product: "E-book Mind$ell",
       platform: "Meta Ads",
+      budget: "R$ 12,00/dia",
       description: "Objetivo: Conversão (Compra). Esta campanha é o motor principal para atrair novos clientes com o E-book de baixo custo (R$ 19,90) para validar a oferta e o público.",
       execution: {
         audience: {
@@ -91,6 +92,7 @@ export const campaignPlanData: CampaignPlan = {
       title: "Campanha 2: Remarketing (Tráfego Quente)",
       product: "E-book Mind$ell / Treinamento Mind$ell",
       platform: "Meta Ads",
+      budget: "R$ 6,00/dia",
       description: "Objetivo: Conversão (Compra). O foco aqui é recuperar vendas de pessoas que já demonstraram interesse, tanto no E-book quanto no Treinamento (upsell).",
       execution: {
         audience: {

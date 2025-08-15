@@ -46,6 +46,7 @@ export type Campaign = {
   title: string;
   product: string;
   platform: string;
+  budget: string;
   description: string;
   execution: CampaignExecutionPlan;
 };
