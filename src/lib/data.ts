@@ -190,7 +190,7 @@ export const campaignPlanData: CampaignPlan = {
     {
       id: "flow-3",
       title: "Fluxo de Remarketing (Recuperação de Vendas)",
-      audience: "Visitantes que acessaram a página de vendas (E-book ou Treinamento), mas não compraram.",
+      audience: "Visitantes que acessaram a página de vendas (E-book ou Treinamento), mas não compraram. A captura de contato para este público será potencializada com a implementação de um web push (via RD Station) com intenção de saída para capturar leads no momento em que demonstram abandonar a página.",
       objective: "Recuperar o interesse do visitante, quebrar objeções comuns (preço, tempo, confiança) e usar a urgência e a prova social para incentivar a conclusão da compra.",
       emails: [
         {
