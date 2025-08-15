@@ -809,61 +809,59 @@ export function MindFlowApp({ plan }: { plan: CampaignPlan }) {
                     <InvestmentCard investment={plan.investment} />
               </TabsContent>
               <TabsContent value="fase2" className="space-y-8 mt-8">
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center gap-3">
-                                <Rocket className="w-6 h-6 text-primary" />
-                                <CardTitle className="text-xl">{plan.phase2.title}</CardTitle>
-                            </div>
-                            <CardDescription className="pt-2">Planejamento futuro para o lançamento dos produtos de maior valor e construção de audiência qualificada.</CardDescription>
-                        </CardHeader>
-                    </Card>
-
-                    <section className="space-y-6">
+                <Card>
+                    <CardHeader>
                         <div className="flex items-center gap-3">
-                            <Building className="w-7 h-7 text-primary" />
-                            <h2 className="text-2xl font-bold">Produtos Futuros</h2>
+                            <Rocket className="w-6 h-6 text-primary" />
+                            <CardTitle className="text-xl">{plan.phase2.title}</CardTitle>
                         </div>
-                        <div className="grid gap-6 md:grid-cols-1">
-                            {plan.phase2.futureProducts.map(product => (
-                                <Card key={product.id}>
-                                    <CardHeader>
-                                        <div className="flex justify-between items-start">
-                                          <CardTitle>{product.title} - <span className="text-primary">{product.targetPrice}</span></CardTitle>
-                                        </div>
-                                        <CardDescription className="pt-2 !mt-4">
-                                         {product.description}
-                                        </CardDescription>
-                                    </CardHeader>
-                                </Card>
-                            ))}
-                        </div>
-                    </section>
+                        <CardDescription className="pt-2">Planejamento futuro para o lançamento dos produtos de maior valor e construção de audiência qualificada.</CardDescription>
+                    </CardHeader>
+                </Card>
 
-                    <section className="space-y-6">
-                        <div className="flex items-center gap-3">
-                            <TrendingUp className="w-7 h-7 text-primary" />
-                            <h2 className="text-2xl font-bold">{plan.phase2.audienceStrategy.title}</h2>
-                        </div>
-                        <div className="space-y-6">
-                            <Card>
+                <section className="space-y-6">
+                    <div className="flex items-center gap-3">
+                        <Building className="w-7 h-7 text-primary" />
+                        <h2 className="text-2xl font-bold">Produtos Futuros</h2>
+                    </div>
+                    <div className="grid gap-6 md:grid-cols-1">
+                        {plan.phase2.futureProducts.map(product => (
+                            <Card key={product.id}>
                                 <CardHeader>
-                                    <CardTitle>{plan.phase2.audienceStrategy.secondaryBait.title}</CardTitle>
-                                    <CardDescription className="pt-2">{plan.phase2.audienceStrategy.secondaryBait.description}</CardDescription>
+                                    <div className="flex justify-between items-start">
+                                      <CardTitle>{product.title} - <span className="text-primary">{product.targetPrice}</span></CardTitle>
+                                    </div>
+                                    <CardDescription className="pt-2 !mt-4">
+                                     {product.description}
+                                    </CardDescription>
                                 </CardHeader>
                             </Card>
-                             <Card>
-                                <CardHeader>
-                                    <CardTitle>{plan.phase2.audienceStrategy.action.title}</CardTitle>
-                                    <CardDescription className="pt-2">{plan.phase2.audienceStrategy.action.description}</CardDescription>
-                                </CardHeader>
-                            </Card>
-                        </div>
-                    </section>
+                        ))}
+                    </div>
+                </section>
+
+                <section className="space-y-6">
+                    <div className="flex items-center gap-3">
+                        <TrendingUp className="w-7 h-7 text-primary" />
+                        <h2 className="text-2xl font-bold">{plan.phase2.audienceStrategy.title}</h2>
+                    </div>
+                    <div className="space-y-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>{plan.phase2.audienceStrategy.secondaryBait.title}</CardTitle>
+                                <CardDescription className="pt-2">{plan.phase2.audienceStrategy.secondaryBait.description}</CardDescription>
+                            </CardHeader>
+                        </Card>
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>{plan.phase2.audienceStrategy.action.title}</CardTitle>
+                                <CardDescription className="pt-2">{plan.phase2.audienceStrategy.action.description}</CardDescription>
+                            </CardHeader>
+                        </Card>
+                    </div>
+                </section>
               </TabsContent>
             </Tabs>
         </div>
     );
 }
-
-    
