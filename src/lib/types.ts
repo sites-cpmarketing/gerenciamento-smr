@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 export type ActionItem = {
   id: string;
   text: string;
@@ -150,3 +152,33 @@ export type TrackingDataRow = {
   trainingSales: number;
   revenue: number;
 };
+
+const KpiSchema = z.object({
+  metric: z.enum(['CPL', 'CTR', 'CPA']),
+  target: z.string(),
+});
+
+const TrackingDataRowSchema = z.object({
+  id: z.number(),
+  period: z.string(),
+  investment: z.number(),
+  impressions: z.number(),
+  clicks: z.number(),
+  leads: z.number(),
+  ebookSales: z.number(),
+  trainingSales: z.number(),
+  revenue: z.number(),
+});
+
+export const PerformanceAnalysisInputSchema = z.object({
+  kpis: z.array(KpiSchema).describe("Key Performance Indicators with their targets."),
+  data: z.array(TrackingDataRowSchema).describe("Time-series data of campaign performance metrics."),
+});
+export type PerformanceAnalysisInput = z.infer<typeof PerformanceAnalysisInputSchema>;
+
+
+export const PerformanceAnalysisSchema = z.object({
+  summary: z.string().describe("A brief, high-level summary of the campaign's overall performance, highlighting key achievements and areas for concern."),
+  suggestions: z.array(z.string()).describe("A list of clear, actionable suggestions for optimization. Each suggestion should be a complete sentence and directly address a specific metric or observation. Prefix suggestions that require immediate attention with 'Atenção: '."),
+});
+export type PerformanceAnalysis = z.infer<typeof PerformanceAnalysisSchema>;

@@ -38,8 +38,8 @@ import {
   BrainCircuit,
   AlertTriangle
 } from 'lucide-react';
-import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow } from '@/lib/types';
-import { analyseCampaignPerformance, PerformanceAnalysis } from '@/ai/flows/analyse-flow';
+import type { CampaignPlan, ActionItem, Kpi, KpiMetric, ChecklistGroup, CreativePlan, Audience, InvestmentDetails, EmailFlow, TrackingDataRow, PerformanceAnalysis } from '@/lib/types';
+import { analyseCampaignPerformance } from '@/ai/flows/analyse-flow';
 import { Skeleton } from './ui/skeleton';
 
 const kpiIcons: Record<KpiMetric, React.ComponentType<{ className?: string }>> = {
