@@ -213,31 +213,70 @@ export const campaignPlanData: CampaignPlan = {
   ],
   executionChecklist: [
     {
-        id: 'day-1',
-        title: "Dia 1: Preparação Técnica e Criativa",
-        items: [
-            { id: 'strat-1', text: "Verificar Pixel do Meta: Confirmar que está ativo nas LPs" },
-            { id: 'strat-2', text: "Criar Landing Pages: Desenvolver as páginas de venda para o E-book e o Treinamento" },
-            { id: 'strat-3', text: "Separar Criativos: Organizar todas as imagens e vídeos para as campanhas" },
-        ]
+      id: 'infra',
+      title: "Infraestrutura e Páginas",
+      items: [
+        { id: 'check-infra-1', text: "Desenvolver Landing Page de Vendas para o E-book Mind$ell" },
+        { id: 'check-infra-2', text: "Desenvolver Landing Page de Vendas para o Treinamento Mind$ell" },
+        { id: 'check-infra-3', text: "Configurar e verificar o Pixel do Meta em ambas as Landing Pages" },
+        { id: 'check-infra-4', text: "Configurar o domínio e garantir que os certificados SSL estão ativos" },
+        { id: 'check-infra-5', text: "Integrar as páginas com o gateway de pagamento" }
+      ]
     },
     {
-        id: 'day-2',
-        title: "Dia 2: Configuração das Campanhas",
-        items: [
-            { id: 'strat-4', text: "Montar Campanhas no Meta Ads: Configurar as campanhas de Captação e Remarketing" },
-            { id: 'strat-5', text: "Implementar Fluxos de E-mail: Construir as sequências de upsell e engajamento" },
-            { id: 'strat-6', text: "Criar Públicos de Remarketing: Configurar públicos de visitantes (7 e 30 dias)" },
-        ]
+      id: 'creatives',
+      title: "Criativos para Campanhas",
+      items: [
+        { id: 'check-cr-1', text: "Criar Imagem Estática 'Venda Mais com Gatilhos Mentais' para Campanha 1" },
+        { id: 'check-cr-2', text: "Produzir Vídeo 'Seus Clientes Dizem Não?' para Campanha 1" },
+        { id: 'check-cr-3', text: "Desenvolver Carrossel 'PNL para Vendedores' para Campanha 1" },
+        { id: 'check-cr-4', text: "Produzir Vídeo (Plano B) 'O Segredo dos Vendedores de Sucesso' para Campanha 1" },
+        { id: 'check-cr-5', text: "Criar Imagem Estática (Plano B) 'Para Empreendedores que Vendem' para Campanha 1" },
+        { id: 'check-cr-6', text: "Criar Imagem Estática 'Finalize sua Compra' para Campanha 2 (Remarketing)" },
+        { id: 'check-cr-7', text: "Produzir Vídeo 'Ainda dá tempo' para Campanha 2 (Remarketing)" },
+        { id: 'check-cr-8', text: "Criar Carrossel (Plano B) 'Você Deu o Primeiro Passo' para Campanha 2 (Remarketing)" },
+        { id: 'check-cr-9', text: "Produzir Vídeo (Plano B) 'De Leitor a Especialista' para Campanha 2 (Remarketing)" }
+      ]
     },
     {
-        id: 'day-3',
-        title: "Dia 3: Testes Finais e Lançamento",
-        items: [
-            { id: 'strat-7', text: "Realizar Compras-Teste: Verificar os funis do E-book e do Treinamento" },
-            { id: 'strat-8', text: "Revisão Final das Campanhas: Fazer uma última checagem em textos, links e orçamentos" },
-            { id: 'strat-9', text: "Ativar Campanhas: Publicar as campanhas de captação e agendar o remarketing" },
-        ]
+      id: 'campaigns-setup',
+      title: "Configuração de Campanhas (Meta Ads)",
+      items: [
+        { id: 'check-camp-1', text: "Configurar 'Campanha 1: Captação Direta' com objetivo de Conversão" },
+        { id: 'check-camp-2', text: "Criar conjunto de anúncios para o público principal (Interesses) da Campanha 1" },
+        { id: 'check-camp-3', text: "Subir criativos 'Venda Mais', 'Seus Clientes Dizem Não?' e 'PNL para Vendedores' na Campanha 1" },
+        { id: 'check-camp-4', text: "Configurar 'Campanha 2: Remarketing' com objetivo de Conversão" },
+        { id: 'check-camp-5', text: "Criar público personalizado de visitantes do site (14 dias) para Campanha 2" },
+        { id: 'check-camp-6', text: "Subir criativos 'Finalize sua Compra' e 'Ainda dá tempo' na Campanha 2" },
+        { id: 'check-camp-7', text: "Criar público personalizado de compradores do E-book para o Plano B (Upsell)" },
+        { id: 'check-camp-8', text: "Excluir público de compradores de todas as campanhas de captação e remarketing relevantes" }
+      ]
+    },
+    {
+      id: 'emails',
+      title: "Automação de E-mail (Fluxos)",
+      items: [
+        { id: 'check-email-1', text: "Escrever e configurar e-mail 'O seu guia chegou! E agora?' no Fluxo Pós-Compra E-book" },
+        { id: 'check-email-2', text: "Escrever e configurar e-mail 'O segredo que não coube no e-book...' no Fluxo Pós-Compra E-book" },
+        { id: 'check-email-3', text: "Escrever e configurar e-mail 'Um convite especial para você' com cupom no Fluxo Pós-Compra E-book" },
+        { id: 'check-email-4', text: "Escrever e configurar e-mail de boas-vindas do Treinamento no Fluxo Pós-Compra Treinamento" },
+        { id: 'check-email-5', text: "Escrever e configurar e-mail 'Uma dica extra para seus estudos' no Fluxo Pós-Compra Treinamento" },
+        { id: 'check-email-6', text: "Escrever e configurar e-mail 'Como estão seus resultados?' no Fluxo Pós-Compra Treinamento" },
+        { id: 'check-email-7', text: "Escrever e configurar e-mail 'Você esqueceu algo?' no Fluxo de Remarketing" },
+        { id: 'check-email-8', text: "Escrever e configurar e-mail 'Ainda em dúvida?' com prova social no Fluxo de Remarketing" },
+        { id: 'check-email-9', text: "Escrever e configurar e-mail 'Sua oferta especial está prestes a expirar' no Fluxo de Remarketing" }
+      ]
+    },
+    {
+      id: 'final-review',
+      title: "Revisão e Lançamento",
+      items: [
+        { id: 'check-review-1', text: "Realizar uma compra-teste completa para o E-book Mind$ell" },
+        { id: 'check-review-2', text: "Realizar uma compra-teste completa para o Treinamento Mind$ell" },
+        { id: 'check-review-3', text: "Verificar se as tags de conversão estão disparando corretamente" },
+        { id: 'check-review-4', text: "Revisar todos os textos, links e orçamentos nas campanhas do Meta Ads" },
+        { id: 'check-review-5', text: "Ativar as campanhas e monitorar as primeiras horas de performance" }
+      ]
     }
   ],
   phase2: {
